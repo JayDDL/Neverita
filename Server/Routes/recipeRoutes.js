@@ -4,7 +4,7 @@ const { getAllRecipes, createRecipe } = require('../Controllers/recipeController
 const recipeRouter = express.Router();
 
 // GET requests to '/recipes'
-recipeRouter.get('/recipes', async (req, res) => {
+recipeRouter.get('/', async (req, res) => {
   try {
     await getAllRecipes(req, res);
   } catch (error) {
@@ -13,7 +13,7 @@ recipeRouter.get('/recipes', async (req, res) => {
 });
 
 // POST requests to '/recipes'
-recipeRouter.post('/recipes', async (req, res) => {
+recipeRouter.post('/', async (req, res) => {
   try {
     await createRecipe(req, res);
   } catch (error) {

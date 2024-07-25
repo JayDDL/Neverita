@@ -3,7 +3,7 @@ const { getAllMealPlans, createMealPlan } = require('../Controllers/mealPlanCont
 
 const mealPlanRouter = express.Router();
 
-mealPlanRouter.get('/mealplan', async (req, res) => {
+mealPlanRouter.get('/', async (req, res) => {
   try {
     await getAllMealPlans(req, res);
   } catch (error) {
@@ -11,7 +11,7 @@ mealPlanRouter.get('/mealplan', async (req, res) => {
   }
 });
 
-mealPlanRouter.post('/mealplan', async (req, res) => {
+mealPlanRouter.post('/', async (req, res) => {
   try {
     await createMealPlan(req, res);
   } catch (error) {

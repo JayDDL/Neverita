@@ -4,7 +4,7 @@ const { getUser, createUser } = require('../Controllers/userController');
 const userRouter = express.Router();
 
 // Basic GET request
-userRouter.get('/user', async (req, res) => {
+userRouter.get('/', async (req, res) => {
   try {
     await getUser(req, res);
   } catch (error) {
@@ -13,7 +13,7 @@ userRouter.get('/user', async (req, res) => {
 });
 
 // Basic POST request
-userRouter.post('/user', async (req, res) => {
+userRouter.post('/', async (req, res) => {
   try {
     await createUser(req, res);
   } catch (error) {
