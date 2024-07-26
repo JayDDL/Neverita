@@ -3,7 +3,7 @@ const { getAllRecipes, createRecipe } = require('../Controllers/recipeController
 
 const recipeRouter = express.Router();
 
-// GET requests to '/recipes'
+// GET all recipes
 recipeRouter.get('/', async (req, res) => {
   try {
     await getAllRecipes(req, res);
@@ -12,7 +12,16 @@ recipeRouter.get('/', async (req, res) => {
   }
 });
 
-// POST requests to '/recipes'
+// GET a recipe by ID
+recipeRouter.get('/:id', async (req, res) => {
+  try {
+    await getRecipeById(req, res);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
+// POST a new recipe
 recipeRouter.post('/', async (req, res) => {
   try {
     await createRecipe(req, res);
