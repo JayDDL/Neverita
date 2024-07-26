@@ -15,6 +15,7 @@ const getRecipeById = async (req, res) => {
     if (recipe) {
       res.status(200).json(recipe);
     } else {
+      console.log('Cannot get recipe by ID2', error)
       res.status(404).json({ error: 'Recipe ID not found' });
     }
   } catch (error) {

@@ -22,6 +22,6 @@ app.use('/mealplans', mealPlanRoutes);
 // Sync database and start server
 sequelize.sync().then(() => {
   app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`🚀🚀🚀🚀🚀 Server is running on http://localhost:${PORT} 🚀🚀🚀🚀🚀`);
   });
 });

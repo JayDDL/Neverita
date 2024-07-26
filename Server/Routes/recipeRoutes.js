@@ -17,6 +17,7 @@ recipeRouter.get('/:id', async (req, res) => {
   try {
     await getRecipeById(req, res);
   } catch (error) {
+    console.log('Cannot get recipe by ID', error)
     res.status(500).send(error.message);
   }
 });
