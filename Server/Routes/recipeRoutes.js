@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllRecipes, createRecipe } = require('../Controllers/recipeController');
+const { getAllRecipes, createRecipe, getRecipeById } = require('../Controllers/recipeController');
 
 const recipeRouter = express.Router();
 
