@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import './RecipeDetails.css'; // Import the CSS file
 
 const RecipeDetails = () => {
   const { id } = useParams(); // Get the recipe ID from the URL
@@ -24,11 +25,11 @@ const RecipeDetails = () => {
   }, [id]);
 
   if (!recipe) {
-    return <div>Loading recipe...</div>;
+    return <div className="container">Loading recipe...</div>;
   }
 
   return (
-    <div>
+    <div className="container">
       <h1>{recipe.name}</h1>
       <h2>Description</h2>
       <p>{recipe.description}</p>
@@ -36,7 +37,7 @@ const RecipeDetails = () => {
       <ul>
         {recipe.ingredients.map((ingredient, index) => (
           <li key={index}>
-            {ingredient.name} - {ingredient.quantity} - {ingredient.preparationMethod} - {ingredient.cookingMethod}
+            {ingredient.name} - {ingredient.weight} - {ingredient.preparationType} - {ingredient.cookingMethod}
           </li>
         ))}
       </ul>
