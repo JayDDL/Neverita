@@ -24,7 +24,7 @@ const RecipeDetails = () => {
   }, [id]);
 
   if (!recipe) {
-    return <div>Loading...</div>;
+    return <div>Loading recipe...</div>;
   }
 
   return (

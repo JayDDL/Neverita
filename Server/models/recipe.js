@@ -4,28 +4,21 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    description: DataTypes.TEXT,
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
     ingredients: {
-      type: DataTypes.JSONB, // or DataTypes.ARRAY(DataTypes.STRING)?
+      type: DataTypes.JSONB, // Store ingredients as an array of JSON objects
       allowNull: false,
-      defaultValue: []
+      defaultValue: [],
     },
-    quantity: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    preparationMethod: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    cookingMethod: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    }
   }, {});
+
   // Model association
   Recipe.associate = function(models) {
     Recipe.belongsTo(models.User);
   };
+
   return Recipe;
 };
