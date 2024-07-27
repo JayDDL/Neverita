@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import ViewRecipes from './Pages/ViewRecipes';
 import RecipeDetails from './Pages/RecipeDetails';
 import CreateRecipe from './Pages/CreateRecipe';
+import DailyMealPlanner from './Pages/DailyMealPlanner';
 import './App.css';
 
 const App = () => {
@@ -16,12 +17,16 @@ const App = () => {
             <li>
               <Link to="/create-recipe">Create Recipe</Link>
             </li>
+            <li>
+              <Link to="/daily-meal-planner">Daily Meal Planner</Link> {/* Updated link */}
+            </li>
           </ul>
         </nav>
         <Routes>
           <Route path="/view-recipes" element={<ViewRecipes />} />
           <Route path="/recipe/:id" element={<RecipeDetails />} />
           <Route path="/create-recipe" element={<CreateRecipe />} />
+          <Route path="/daily-meal-planner" element={<DailyMealPlanner />} />
         </Routes>
       </div>
     </Router>

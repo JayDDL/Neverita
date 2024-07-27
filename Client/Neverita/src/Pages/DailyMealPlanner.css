@@ -1,0 +1,114 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
+
+.daily-meal-planner {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 20px;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+.day-navigation {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.day-navigation button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.day-navigation h2 {
+  margin: 0 20px;
+}
+
+.meal-planner-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin-right: 20px;
+}
+
+.meals {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+
+.meal {
+  margin-bottom: 20px;
+}
+
+.meal h3 {
+  margin: 0;
+}
+
+.meal button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.recipe-list-container {
+  width: 30%;
+}
+
+.recipe-list input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.recipe-list ul {
+  list-style-type: none;
+  padding: 0;
+  overflow-y: auto;
+  max-height: 80vh; /* Adjust this value as needed */
+}
+
+.recipe-list li {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.recipe-list li:hover {
+  background-color: #e0e0e0;
+}
+
+.recipe-list li.selected {
+  background-color: #e0e0e0;
+}
+
+.save-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.save-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
