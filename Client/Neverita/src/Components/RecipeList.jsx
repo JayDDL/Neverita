@@ -1,16 +1,17 @@
-import { Link } from 'react-router-dom';
+import './RecipeList.css';
 
-const RecipeList = ({ recipes }) => {
+const RecipeList = ({ recipes, onViewClick }) => {
   return (
-    <div>
-      <h2>Recipes</h2>
-      <ul>
-        {recipes.map((recipe) => (
-          <li key={recipe.id}>
-            <Link to={`/recipe/${recipe.id}`}>{recipe.name}</Link>
-          </li>
-        ))}
-      </ul>
+    <div className="recipe-list">
+      {recipes.map(recipe => (
+        <div key={recipe.id} className="recipe-item">
+          <div>
+            <div className="recipe-title">{recipe.name}</div>
+            <div className="recipe-description">{recipe.description}</div>
+          </div>
+          <button onClick={() => onViewClick(recipe.id)}>View</button>
+        </div>
+      ))}
     </div>
   );
 };

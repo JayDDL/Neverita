@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import RecipeList from '../Components/RecipeList';
 import './ViewRecipes.css';
 
 const ViewRecipes = () => {
   const [recipes, setRecipes] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRecipes = async () => {
@@ -23,10 +25,14 @@ const ViewRecipes = () => {
     fetchRecipes();
   }, []);
 
+  const handleViewClick = (id) => {
+    navigate(`/recipe/${id}`);
+  };
+
   return (
-    <div>
-      <h1>View Recipes</h1>
-      <RecipeList recipes={recipes} />
+    <div className="container">
+      <h1>Recipes</h1>
+      <RecipeList recipes={recipes} onViewClick={handleViewClick} />
     </div>
   );
 };

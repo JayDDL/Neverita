@@ -1,117 +1,87 @@
+@import '../App.css';
+
 .weekly-meal-planner {
-  display: flex;
+  width: 80%;
+  max-width: 1200px;
+  margin: 100px auto;
   padding: 20px;
-  justify-content: space-between;
-}
-
-.meal-planner-content {
-  width: 70%;
-}
-
-.recipe-list-container {
-  width: 25%;
-}
-
-.week-range {
-  text-align: center;
-  margin-bottom: 10px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
 }
 
 .week-navigation {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center; 
-  gap: 10px; 
   margin-bottom: 20px;
 }
 
 .week-navigation button {
-  background-color: #4caf50;
+  background-color: #45a049;
   color: white;
   border: none;
-  padding: 5px 10px; 
-  font-size: 14px; 
+  padding: 10px;
+  border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s;
+  font-size: 16px;
+  transition: background-color 0.3s;
 }
 
 .week-navigation button:hover {
-  background-color: #45a049;
-  transform: scale(1.05);
+  background-color: #388e3c;
 }
 
-.meal-table {
-  width: 100%;
-  border-collapse: collapse;
+.week-navigation h2 {
+  margin: 0 20px;
 }
 
-.meal-table th,
-.meal-table td {
-  border: 1px solid #ccc;
+.weekly-meals {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 20px;
+}
+
+.day-meals {
+  background-color: #f9f9f9;
   padding: 10px;
-  text-align: center;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
-.meal-table th {
-  background-color: #f0f0f0;
+.day-meals h3 {
+  margin: 0 0 10px 0;
 }
 
-.meal-table td {
-  vertical-align: top;
-}
-
-.meal-table button {
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s;
-}
-
-.meal-table button:hover {
-  background-color: #45a049;
-  transform: scale(1.05);
-}
-
-.recipe-list input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-}
-
-.recipe-list ul {
+.meal-list {
   list-style-type: none;
   padding: 0;
 }
 
-.recipe-list li {
+.meal-list li {
+  margin-bottom: 10px;
+  padding: 5px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.meal-list li:last-child {
+  margin-bottom: 0;
+}
+
+.add-button {
+  background-color: #45a049;
+  color: white;
+  border: none;
   padding: 10px;
-  border-bottom: 1px solid #ccc;
+  border-radius: 5px;
   cursor: pointer;
+  font-size: 16px;
   transition: background-color 0.3s;
 }
 
-.recipe-list li.selected,
-.recipe-list li:hover {
-  background-color: #f0f0f0;
-}
-
-.save-button-container {
-  margin-top: 20px;
-  text-align: center;
-}
-
-.save-button {
-  padding: 10px 20px;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s;
-}
-
-.save-button:hover {
-  background-color: #45a049;
-  transform: scale(1.05);
+.add-button:hover {
+  background-color: #388e3c; 
 }

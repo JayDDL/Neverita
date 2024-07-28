@@ -135,58 +135,60 @@ const DailyMealPlanner = () => {
 
   return (
     <div className="daily-meal-planner">
-      <div className="meal-planner-content">
-        <div className="day-navigation">
-          <button onClick={() => handleDayChange('prev')}>{'<'}</button>
-          <h2>{formatDate(currentDate)}</h2>
-          <button onClick={() => handleDayChange('next')}>{'>'}</button>
-        </div>
-        <div className="meals">
-          <div className="meal">
-            <h3>Breakfast</h3>
-            <button onClick={() => handleAddButtonClick('breakfast')}>Add</button>
-            <p>{selectedMeals.breakfast ? selectedMeals.breakfast.name : 'No selection'}</p>
+      <div className="daily-meal-planner-content">
+        <div className="meal-planner-content">
+          <div className="day-navigation">
+            <button onClick={() => handleDayChange('prev')}>{'<'}</button>
+            <h2>{formatDate(currentDate)}</h2>
+            <button onClick={() => handleDayChange('next')}>{'>'}</button>
           </div>
-          <div className="meal">
-            <h3>Lunch</h3>
-            <button onClick={() => handleAddButtonClick('lunch')}>Add</button>
-            <p>{selectedMeals.lunch ? selectedMeals.lunch.name : 'No selection'}</p>
+          <div className="meals">
+            <div className="meal">
+              <h3>Breakfast</h3>
+              <button onClick={() => handleAddButtonClick('breakfast')}>Add</button>
+              <p>{selectedMeals.breakfast ? selectedMeals.breakfast.name : 'No selection'}</p>
+            </div>
+            <div className="meal">
+              <h3>Lunch</h3>
+              <button onClick={() => handleAddButtonClick('lunch')}>Add</button>
+              <p>{selectedMeals.lunch ? selectedMeals.lunch.name : 'No selection'}</p>
+            </div>
+            <div className="meal">
+              <h3>Dinner</h3>
+              <button onClick={() => handleAddButtonClick('dinner')}>Add</button>
+              <p>{selectedMeals.dinner ? selectedMeals.dinner.name : 'No selection'}</p>
+            </div>
           </div>
-          <div className="meal">
-            <h3>Dinner</h3>
-            <button onClick={() => handleAddButtonClick('dinner')}>Add</button>
-            <p>{selectedMeals.dinner ? selectedMeals.dinner.name : 'No selection'}</p>
+          <div className="save-button-container">
+            <button className="save-button" onClick={handleSaveMealPlan}>Save Meal Plan</button>
           </div>
         </div>
-        <div className="save-button-container">
-          <button className="save-button" onClick={handleSaveMealPlan}>Save Meal Plan</button>
-        </div>
-      </div>
-      <div className="recipe-list-container">
-        <div className="recipe-list">
-          <input
-            type="text"
-            placeholder="Search recipes..."
-            value={searchQuery}
-            onChange={handleSearchChange}
-          />
-          <ul>
-            {filteredRecipes.map((recipe, index) => (
-              <li
-                key={index}
-                onClick={() => handleSelectRecipe(recipe)}
-                className={
-                  recipe.id === selectedMeals.breakfast?.id ||
-                  recipe.id === selectedMeals.lunch?.id ||
-                  recipe.id === selectedMeals.dinner?.id
-                    ? 'selected'
-                    : ''
-                }
-              >
-                {recipe.name}
-              </li>
-            ))}
-          </ul>
+        <div className="recipe-list-container">
+          <div className="recipe-list">
+            <input
+              type="text"
+              placeholder="Search recipes..."
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
+            <ul>
+              {filteredRecipes.map((recipe, index) => (
+                <li
+                  key={index}
+                  onClick={() => handleSelectRecipe(recipe)}
+                  className={
+                    recipe.id === selectedMeals.breakfast?.id ||
+                    recipe.id === selectedMeals.lunch?.id ||
+                    recipe.id === selectedMeals.dinner?.id
+                      ? 'selected'
+                      : ''
+                  }
+                >
+                  {recipe.name}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </div>
