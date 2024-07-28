@@ -3,6 +3,7 @@ import ViewRecipes from './Pages/ViewRecipes';
 import RecipeDetails from './Pages/RecipeDetails';
 import CreateRecipe from './Pages/CreateRecipe';
 import DailyMealPlanner from './Pages/DailyMealPlanner';
+import WeeklyMealPlanner from './Pages/WeeklyMealPlanner';
 import './App.css';
 
 const App = () => {
@@ -18,7 +19,10 @@ const App = () => {
               <Link to="/create-recipe">Create Recipe</Link>
             </li>
             <li>
-              <Link to="/daily-meal-planner">Daily Meal Planner</Link> {/* Updated link */}
+              <Link to="/daily-meal-planner">Daily Meal Planner</Link>
+            </li>
+            <li>
+              <Link to="/weekly-meal-planner">Weekly Meal Planner</Link>
             </li>
           </ul>
         </nav>
@@ -27,6 +31,7 @@ const App = () => {
           <Route path="/recipe/:id" element={<RecipeDetails />} />
           <Route path="/create-recipe" element={<CreateRecipe />} />
           <Route path="/daily-meal-planner" element={<DailyMealPlanner />} />
+          <Route path="/weekly-meal-planner" element={<WeeklyMealPlanner />} />
         </Routes>
       </div>
     </Router>
