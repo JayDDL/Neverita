@@ -1,7 +1,7 @@
 // Import necessary hooks and components from 'react' and 'react-router-dom'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './CreateRecipe.css';
+import styles from './CreateRecipe.module.css';
 
 // Define the CreateRecipe functional component
 const CreateRecipe = () => {
@@ -69,64 +69,64 @@ const CreateRecipe = () => {
   return (
     <div className="container">
       <h1>Create Recipe</h1>
-      <div className="form-group">
-        <label>
+      <div className={styles.formGroup}>
+        <label className={styles.label}>
           Recipe Name:
-          <input
+          <input className={styles.input}
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)} // Update name state on input change
           />
         </label>
       </div>
-      <div className="form-group">
-        <label>
+      <div className={styles.formGroup}>
+        <label className={styles.label}>
           Recipe Description:
-          <textarea
+          <textarea className={styles.textarea}
             value={description}
             onChange={(e) => setDescription(e.target.value)} // Update description state on textarea change
           />
         </label>
       </div>
-      <div className="ingredient-section">
+      <div className={styles.ingredientSection}>
         <h2>Add Ingredients</h2>
-        <div className="ingredient-form">
-          <label>
+        <div className={styles.ingredientForm}>
+          <label className={styles.label}>
             Ingredient Name:
-            <input
+            <input className={styles.input}
               type="text"
               value={ingredientName}
               onChange={(e) => setIngredientName(e.target.value)} // Update ingredientName state on input change
             />
           </label>
-          <label>
+          <label className={styles.label}>
             Quantity:
-            <input
+            <input className={styles.input}
               type="text"
               value={quantity}
               onChange={(e) => setQuantity(e.target.value)} // Update quantity state on input change
             />
           </label>
-          <label>
+          <label className={styles.label}>
             Preparation Method:
-            <input
+            <input className={styles.input}
               type="text"
               value={preparationMethod}
               onChange={(e) => setPreparationMethod(e.target.value)} // Update preparationMethod state on input change
             />
           </label>
-          <label>
+          <label className={styles.label}>
             Cooking Method:
-            <input
+            <input className={styles.input}
               type="text"
               value={cookingMethod}
               onChange={(e) => setCookingMethod(e.target.value)} // Update cookingMethod state on input change
             />
           </label>
-          <button onClick={handleAddIngredient}>Add Ingredient</button> {/* Call handleAddIngredient on button click */}
+          <button className={styles.button} onClick={handleAddIngredient}>Add Ingredient</button> {/* Call handleAddIngredient on button click */}
         </div>
       </div>
-      <div className="ingredient-list">
+      <div className={styles.ingredientList}>
         <h2>Ingredients List</h2>
         <ul>
           {/* Map over the ingredients array to display each ingredient */}
@@ -137,7 +137,7 @@ const CreateRecipe = () => {
           ))}
         </ul>
       </div>
-      <button onClick={handleAddRecipe}>Add Recipe</button> {/* Call handleAddRecipe on button click */}
+      <button className={styles.button} onClick={handleAddRecipe}>Add Recipe</button> {/* Call handleAddRecipe on button click */}
     </div>
   );
 };
