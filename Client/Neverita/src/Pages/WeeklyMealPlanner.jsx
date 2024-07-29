@@ -132,70 +132,72 @@ const WeeklyMealPlanner = () => {
           <button onClick={() => handleWeekChange('prev')}>{'<'}</button>
           <button onClick={() => handleWeekChange('next')}>{'>'}</button>
         </div>
-        <table className="meal-table">
-          <thead>
-            <tr>
-              <th>Day</th>
-              <th>Breakfast</th>
-              <th>Lunch</th>
-              <th>Dinner</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentWeek.days.map((day, index) => (
-              <tr key={index}>
-                <td>{formatDate(day)}</td>
-                <td>
-                  <div>
-                    <button onClick={() => handleAddButtonClick(index, 'breakfast')}>Add</button>
-                    <p>{mealPlans[index].breakfast ? mealPlans[index].breakfast.name : 'No selection'}</p>
-                  </div>
-                </td>
-                <td>
-                  <div>
-                    <button onClick={() => handleAddButtonClick(index, 'lunch')}>Add</button>
-                    <p>{mealPlans[index].lunch ? mealPlans[index].lunch.name : 'No selection'}</p>
-                  </div>
-                </td>
-                <td>
-                  <div>
-                    <button onClick={() => handleAddButtonClick(index, 'dinner')}>Add</button>
-                    <p>{mealPlans[index].dinner ? mealPlans[index].dinner.name : 'No selection'}</p>
-                  </div>
-                </td>
+        <div className="meal-table-and-recipes">
+          <table className="meal-table">
+            <thead>
+              <tr>
+                <th>Day</th>
+                <th>Breakfast</th>
+                <th>Lunch</th>
+                <th>Dinner</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {currentWeek.days.map((day, index) => (
+                <tr key={index}>
+                  <td>{formatDate(day)}</td>
+                  <td>
+                    <div>
+                      <button onClick={() => handleAddButtonClick(index, 'breakfast')}>Add</button>
+                      <p>{mealPlans[index].breakfast ? mealPlans[index].breakfast.name : 'No selection'}</p>
+                    </div>
+                  </td>
+                  <td>
+                    <div>
+                      <button onClick={() => handleAddButtonClick(index, 'lunch')}>Add</button>
+                      <p>{mealPlans[index].lunch ? mealPlans[index].lunch.name : 'No selection'}</p>
+                    </div>
+                  </td>
+                  <td>
+                    <div>
+                      <button onClick={() => handleAddButtonClick(index, 'dinner')}>Add</button>
+                      <p>{mealPlans[index].dinner ? mealPlans[index].dinner.name : 'No selection'}</p>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="recipe-list-container">
+            <div className="recipe-list">
+              <input
+                type="text"
+                placeholder="Search recipes..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+              <ul>
+                {filteredRecipes.map((recipe, index) => (
+                  <li
+                    key={index}
+                    onClick={() => handleSelectRecipe(recipe)}
+                    className={
+                      recipe.id === mealPlans[currentDay]?.breakfast?.id ||
+                      recipe.id === mealPlans[currentDay]?.lunch?.id ||
+                      recipe.id === mealPlans[currentDay]?.dinner?.id
+                        ? 'selected'
+                        : ''
+                    }
+                  >
+                    {recipe.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
         <div className="save-button-container">
           <button className="save-button" onClick={handleSaveMealPlan}>Save Meal Plan</button>
-        </div>
-      </div>
-      <div className="recipe-list-container">
-        <div className="recipe-list">
-          <input
-            type="text"
-            placeholder="Search recipes..."
-            value={searchQuery}
-            onChange={handleSearchChange}
-          />
-          <ul>
-            {filteredRecipes.map((recipe, index) => (
-              <li
-                key={index}
-                onClick={() => handleSelectRecipe(recipe)}
-                className={
-                  recipe.id === mealPlans[currentDay]?.breakfast?.id ||
-                  recipe.id === mealPlans[currentDay]?.lunch?.id ||
-                  recipe.id === mealPlans[currentDay]?.dinner?.id
-                    ? 'selected'
-                    : ''
-                }
-              >
-                {recipe.name}
-              </li>
-            ))}
-          </ul>
         </div>
       </div>
     </div>

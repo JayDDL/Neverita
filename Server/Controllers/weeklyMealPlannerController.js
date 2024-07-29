@@ -1,5 +1,6 @@
-const { DailyMealPlan, Recipe } = require('../models');
+const { WeeklyMealPlan } = require('../models');
 
+// Get weekly meal plans by start date
 const getWeeklyMealPlans = async (req, res) => {
   try {
     const { startDate } = req.query;
@@ -7,57 +8,46 @@ const getWeeklyMealPlans = async (req, res) => {
       return res.status(400).json({ error: 'startDate query parameter is required' });
     }
 
-    const startOfWeek = new Date(startDate);
-    const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(startOfWeek.getDate() + 6);
+    const weekStartDate = new Date(startDate);
+    const weekEndDate = new Date(weekStartDate);
+    weekEndDate.setDate(weekStartDate.getDate() + 6);
 
-    const mealPlans = await DailyMealPlan.findAll({
-      where: {
-        date: {
-          [Op.between]: [startOfWeek, endOfWeek],
-        },
-      },
-      include: [
-        { model: Recipe, as: 'breakfast' },
-        { model: Recipe, as: 'lunch' },
-        { model: Recipe, as: 'dinner' },
-      ],
+    const mealPlan = await WeeklyMealPlan.findOne({
+      where: { weekStartDate },
     });
 
-    const formattedMealPlans = mealPlans.map(plan => ({
-      day: plan.date.toLocaleDateString('en-US', { weekday: 'long' }),
-      date: plan.date.toISOString().split('T')[0],
-      breakfast: plan.breakfast,
-      lunch: plan.lunch,
-      dinner: plan.dinner,
-    }));
+    if (!mealPlan) {
+      return res.status(404).json({ error: 'Weekly meal plan not found' });
+    }
 
-    res.json(formattedMealPlans);
+    res.json(mealPlan);
   } catch (error) {
     console.error('Error fetching weekly meal plans:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
 
+// Create or update a weekly meal plan
 const saveWeeklyMealPlan = async (req, res) => {
   try {
-    const { date, breakfastId, lunchId, dinnerId } = req.body;
-    if (!date) {
-      return res.status(400).json({ error: 'date is required' });
+    const { weekStartDate, weekEndDate, monday, tuesday, wednesday, thursday, friday, saturday, sunday } = req.body;
+
+    if (!weekStartDate || !weekEndDate) {
+      return res.status(400).json({ error: 'weekStartDate and weekEndDate are required' });
     }
 
-    const mealPlan = await DailyMealPlan.findOrCreate({
-      where: { date },
-      defaults: { breakfastId, lunchId, dinnerId },
+    const [mealPlan, created] = await WeeklyMealPlan.findOrCreate({
+      where: { weekStartDate },
+      defaults: { weekEndDate, monday, tuesday, wednesday, thursday, friday, saturday, sunday },
     });
 
-    if (!mealPlan[1]) { // if mealPlan is not newly created
-      await mealPlan[0].update({ breakfastId, lunchId, dinnerId });
+    if (!created) { // if mealPlan is not newly created
+      await mealPlan.update({ weekEndDate, monday, tuesday, wednesday, thursday, friday, saturday, sunday });
     }
 
-    res.status(201).json({ message: 'Meal plan saved successfully' });
+    res.status(201).json({ message: 'Weekly meal plan saved successfully' });
   } catch (error) {
-    console.error('Error saving meal plan:', error);
+    console.error('Error saving weekly meal plan:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
