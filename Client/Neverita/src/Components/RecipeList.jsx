@@ -1,5 +1,6 @@
 import './RecipeList.css';
 
+// Define the RecipeList functional component, which takes recipes and onViewClick as props
 const RecipeList = ({ recipes, onViewClick }) => {
   return (
     <div className="recipe-list">
@@ -15,5 +16,5 @@ const RecipeList = ({ recipes, onViewClick }) => {
     </div>
   );
 };
-
+// Export the RecipeList component as the default export
 export default RecipeList;

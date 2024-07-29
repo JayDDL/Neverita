@@ -1,11 +1,11 @@
-const express = require('express');
-const dailyMealPlanRouter = express.Router();
-const { getDailyMealPlans, createDailyMealPlan } = require('../Controllers/dailyMealPlannerController');
+// Import the Express module
+const express = require('express'); // Import the Express module
+const dailyMealPlanRouter = express.Router(); // Create a new router object for daily meal plans
 
-// Get meal plan by date
-dailyMealPlanRouter.get('/', getDailyMealPlans);
+// Import the controller functions for daily meal plans
+const { getDailyMealPlans, createDailyMealPlan } = require('../Controllers/dailyMealPlannerController'); // Import the controller functions for daily meal plans
 
-// Create a new meal plan
-dailyMealPlanRouter.post('/', createDailyMealPlan);
+dailyMealPlanRouter.get('/', getDailyMealPlans); // Define a route to get meal plans by date
+dailyMealPlanRouter.post('/', createDailyMealPlan); // Define a route to create a new meal plan
 
-module.exports = dailyMealPlanRouter;
+module.exports = dailyMealPlanRouter; // Export the dailyMealPlanRouter
