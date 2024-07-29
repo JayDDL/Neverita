@@ -11,13 +11,15 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Routes
-const userRoutes = require('./Routes/userRoutes');
-const recipeRoutes = require('./Routes/recipeRoutes');
-const mealPlanRoutes = require('./Routes/mealPlanRoutes');
+const userRoutes = require('./routes/userRoutes');
+const recipeRoutes = require('./routes/recipeRoutes');
+const mealPlanRoutes = require('./routes/mealPlanRoutes');
+const dailyMealPlanRoutes = require('./Routes/dailyMealPlanRoutes'); // Add this line
 
 app.use('/users', userRoutes);
 app.use('/recipes', recipeRoutes);
 app.use('/mealplans', mealPlanRoutes);
+app.use('/daily-meal-plans', dailyMealPlanRoutes); // Add this line
 
 // Sync database and start server
 sequelize.sync().then(() => {
