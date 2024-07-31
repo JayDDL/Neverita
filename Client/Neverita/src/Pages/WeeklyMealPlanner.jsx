@@ -1,27 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import './WeeklyMealPlanner.css';
 
 const WeeklyMealPlanner = () => {
-  // State to manage the current week
   const [currentWeek, setCurrentWeek] = useState(getCurrentWeek());
-  // State to manage the list of recipes
   const [recipes, setRecipes] = useState([]);
-  // State to manage meal plans for the week
   const [mealPlans, setMealPlans] = useState(initializeMealPlans());
-  // State to manage the current meal type being added (breakfast, lunch, or dinner)
   const [currentMealType, setCurrentMealType] = useState(null);
-  // State to manage the current day being added
   const [currentDay, setCurrentDay] = useState(null);
-  // State to manage the search query for filtering recipes
   const [searchQuery, setSearchQuery] = useState('');
-  // Fetch recipes and weekly meal plans when the component mounts or when the current week changes
-  useEffect(() => {
-    fetchRecipes();
-    fetchWeeklyMealPlans(currentWeek.startDate);
-  }, [currentWeek]);
 
   // Function to fetch recipes from the server
-  const fetchRecipes = async () => {
+  const fetchRecipes = useCallback(async () => {
     try {
       const response = await fetch('http://localhost:5000/recipes');
       if (response.ok) {
@@ -33,20 +22,7 @@ const WeeklyMealPlanner = () => {
     } catch (error) {
       console.error('Error fetching recipes:', error);
     }
-  };
-
-  // Function to fetch weekly meal plans from the server
-  const fetchWeeklyMealPlans = async (weekStartDate) => {
-    const promises = [];
-    for (let i = 0; i < 7; i++) {
-      const date = new Date(weekStartDate);
-      date.setDate(date.getDate() + i);
-      const formattedDate = date.toISOString().split('T')[0];
-      promises.push(fetchMealPlanByDate(formattedDate));
-    }
-    const results = await Promise.all(promises);
-    setMealPlans(results);
-  };
+  }, []);
 
   // Function to fetch the meal plan for a specific date from the server
   const fetchMealPlanByDate = async (date) => {
@@ -68,6 +44,24 @@ const WeeklyMealPlanner = () => {
       return { breakfast: '', lunch: '', dinner: '' };
     }
   };
+
+  // Function to fetch weekly meal plans from the server
+  const fetchWeeklyMealPlans = useCallback(async (weekStartDate) => {
+    const promises = [];
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(weekStartDate);
+      date.setDate(date.getDate() + i);
+      const formattedDate = date.toISOString().split('T')[0];
+      promises.push(fetchMealPlanByDate(formattedDate));
+    }
+    const results = await Promise.all(promises);
+    setMealPlans(results);
+  }, []);
+
+  useEffect(() => {
+    fetchRecipes();
+    fetchWeeklyMealPlans(currentWeek.startDate);
+  }, [currentWeek, fetchRecipes, fetchWeeklyMealPlans]);
 
   // Function to handle selecting a recipe for a meal
   const handleSelectRecipe = (recipe) => {
