@@ -3,16 +3,17 @@ import { useParams } from 'react-router-dom';
 import './RecipeDetails.css';
 
 const RecipeDetails = () => {
-  const { id } = useParams(); // Get the recipe ID from the URL
-  const [recipe, setRecipe] = useState(null);
+  const { id } = useParams(); // Get the recipe ID from the URL parameters
+  const [recipe, setRecipe] = useState(null); // State to store the recipe details
 
+  // Fetch recipe details when the component mounts or when the ID changes
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
         const response = await fetch(`http://localhost:5000/recipes/${id}`);
         if (response.ok) {
           const data = await response.json();
-          setRecipe(data);
+          setRecipe(data); // Set the fetched recipe data to the state
         } else {
           console.error('Failed to fetch recipe details, status code:', response.status);
         }
@@ -22,8 +23,9 @@ const RecipeDetails = () => {
     };
 
     fetchRecipe();
-  }, [id]);
+  }, [id]); // Dependency array includes `id` so it refetches if the ID changes
 
+  // Show a loading message if the recipe data is not yet available
   if (!recipe) {
     return <div>Loading recipe...</div>;
   }
