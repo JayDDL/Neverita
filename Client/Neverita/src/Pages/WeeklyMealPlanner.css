@@ -113,6 +113,7 @@
 
 .recipe-list li:hover {
   background-color: #f4f4f4;
+  transform: scale(1.1)
 }
 
 .save-button-container {

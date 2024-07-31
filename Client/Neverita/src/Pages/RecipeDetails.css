@@ -42,4 +42,5 @@
 
 .ingredients-table tr:hover {
   background-color: #ddd;
+  transform: scale(1.05)
 }

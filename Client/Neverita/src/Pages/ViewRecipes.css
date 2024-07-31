@@ -34,9 +34,10 @@ button {
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
-  width: 100px; /* Adjusted width */
+  width: 100px;
 }
 
 button:hover {
   background-color: #45a049;
+  transform: scale(1.1)
 }
