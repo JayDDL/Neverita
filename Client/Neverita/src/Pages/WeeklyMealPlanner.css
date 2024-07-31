@@ -81,7 +81,7 @@
 
 .meal-table td button:hover {
   background-color: #388e3c;
-  transform: scale(1.1); /* Slightly increase size on hover */
+  transform: scale(1.1);
 }
 
 .recipe-list-container {
@@ -132,5 +132,5 @@
 
 .save-button:hover {
   background-color: #388e3c;
-  transform: scale(1.1); /* Slightly increase size on hover */
+  transform: scale(1.1);
 }
