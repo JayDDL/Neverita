@@ -29,7 +29,7 @@ const ViewRecipes = () => {
   }, []); // Empty dependency array to run the effect only once
 
   // Function to handle clicking the view button for a recipe
-  const handleViewClick = (id) => {
+  const handleViewClick = (id:number) => {
     navigate(`/recipe/${id}`); // Navigate to the recipe details page for the selected recipe
   };
 

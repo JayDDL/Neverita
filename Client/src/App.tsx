@@ -4,7 +4,7 @@ import RecipeDetails from './Pages/RecipeDetails';
 import CreateRecipe from './Pages/CreateRecipe';
 import DailyMealPlanner from './Pages/DailyMealPlanner';
 import WeeklyMealPlanner from './Pages/WeeklyMealPlanner';
-import './App.css';
+import './App.css'
 
 const App = () => {
   return (

@@ -2,9 +2,13 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import './RecipeDetails.css';
 
+import { Recipe } from '../types';
+
+
+
 const RecipeDetails = () => {
   const { id } = useParams(); // Get the recipe ID from the URL parameters
-  const [recipe, setRecipe] = useState(null); // State to store the recipe details
+  const [recipe, setRecipe] = useState<Recipe | null>(null); // State to store the recipe details
 
   // Fetch recipe details when the component mounts or when the ID changes
   useEffect(() => {
@@ -46,7 +50,7 @@ const RecipeDetails = () => {
           </tr>
         </thead>
         <tbody>
-          {recipe.ingredients.map((ingredient, index) => (
+          {recipe.ingredients.map((ingredient, index : number) => (
             <tr key={index}>
               <td>{ingredient.name}</td>
               <td>{ingredient.weight}</td>
