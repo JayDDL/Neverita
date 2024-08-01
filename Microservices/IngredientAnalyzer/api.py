@@ -6,26 +6,37 @@ app = Flask(__name__)
 
 api = Api(app)
 
+
 def process_diet_request(data):
-    shelf = Shelf(region='United Kingdom')
-    result = shelf.process_ingredients(data['ingredients'])['labels']
+    shelf = Shelf(region="United Kingdom")
+    try:
+        result = shelf.process_ingredients(data["ingredients"])["labels"]
+        print(result)
+        if(result['vegan']):
+          result = 'vegan'
+        elif(result['vege']):
+          result = 'vegetarian'
+        else:
+          result = 'carnivore'
+    except:
+        result = "uncertain"
     print(result)
-    return f"Processed diet request: {result}"
+    return result
+
 
 class Diet(Resource):
     def get(self):
         data = request.get_json()
         result = process_diet_request(data)
-        return jsonify({
-            "status": "success",
-            "result": result
-        })
+        return jsonify({"status": "success", "result": result})
+
 
 class Food(Resource):
-  def get(self):
-    return jsonify
+    def get(self):
+        return jsonify
 
-api.add_resource(Diet, '/diet')
 
-if __name__ == '__main__':
-    app.run(debug=True)
+api.add_resource(Diet, "/diet")
+
+if __name__ == "__main__":
+    app.run(debug=True, port=5001)
