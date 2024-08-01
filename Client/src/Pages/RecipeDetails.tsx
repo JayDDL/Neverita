@@ -1,37 +1,53 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import './RecipeDetails.css';
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import "./RecipeDetails.css";
 
-import { Recipe } from '../types';
-
-
+import { Recipe } from "../types";
 
 const RecipeDetails = () => {
-  const { id } = useParams(); // Get the recipe ID from the URL parameters
-  const [recipe, setRecipe] = useState<Recipe | null>(null); // State to store the recipe details
+  const { id } = useParams();
+  const [recipe, setRecipe] = useState<Recipe | null>(null);
+  const [diet, setDiet] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch recipe details when the component mounts or when the ID changes
   useEffect(() => {
-    const fetchRecipe = async () => {
+    const fetchRecipeAndDiet = async () => {
+      setIsLoading(true);
       try {
-        const response = await fetch(`http://localhost:5000/recipes/${id}`);
-        if (response.ok) {
-          const data = await response.json();
-          setRecipe(data); // Set the fetched recipe data to the state
-        } else {
-          console.error('Failed to fetch recipe details, status code:', response.status);
+        // Fetch recipe
+        const recipeResponse = await fetch(`http://localhost:5000/recipes/${id}`);
+        if (!recipeResponse.ok) {
+          throw new Error(`Failed to fetch recipe details, status code: ${recipeResponse.status}`);
         }
+        const recipeData = await recipeResponse.json();
+        setRecipe(recipeData);
+
+        // Fetch diet
+        const ingredientNames = recipeData.ingredients.map((ingredient: any) => ingredient.name);
+        const dietResponse = await fetch("http://localhost:5001/diet", {
+          method: "POST",
+          body: JSON.stringify({ ingredients: ingredientNames }),
+          headers: { "Content-Type": "application/json" },
+        });
+        if (!dietResponse.ok) {
+          throw new Error(`Failed to fetch diet, status code: ${dietResponse.status}`);
+        }
+        const dietData = await dietResponse.json();
+        setDiet(dietData.result);
       } catch (error) {
-        console.error('Error fetching recipe details:', error);
-      }
+        console.error("Error fetching data:", error);
+      } 
+      setIsLoading(false);
     };
+    fetchRecipeAndDiet();
+  }, [id]);
 
-    fetchRecipe();
-  }, [id]); // Dependency array includes `id` so it refetches if the ID changes
+  if (isLoading) {
+    return <div>Loading recipe and diet information...</div>;
+  }
 
-  // Show a loading message if the recipe data is not yet available
   if (!recipe) {
-    return <div>Loading recipe...</div>;
+    return <div>Error loading recipe</div>;
   }
 
   return (
@@ -39,6 +55,7 @@ const RecipeDetails = () => {
       <h1>{recipe.name}</h1>
       <h2>Description</h2>
       <p>{recipe.description}</p>
+      {diet && <p>Diet: {diet}</p> }
       <h2>Ingredients</h2>
       <table className="ingredients-table">
         <thead>
@@ -50,7 +67,7 @@ const RecipeDetails = () => {
           </tr>
         </thead>
         <tbody>
-          {recipe.ingredients.map((ingredient, index : number) => (
+          {recipe.ingredients.map((ingredient, index: number) => (
             <tr key={index}>
               <td>{ingredient.name}</td>
               <td>{ingredient.weight}</td>
