@@ -18,10 +18,6 @@ export type SelectedMeals = {
   dinner: Recipe | string;
 }
 
-export type PlannedMeal = {
-  
-}
-
 export type DailyMealPlan = {
   date:string;
   breakfastId:number | string;
