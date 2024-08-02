@@ -1,18 +1,18 @@
 // Import necessary hooks and components from 'react' and 'react-router-dom'
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import styles from './CreateRecipe.module.css';
-import { Ingredient } from '../types';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import styles from "./CreateRecipe.module.css";
+import { Ingredient } from "../../types";
 
 // Define the CreateRecipe functional component
-const CreateRecipe = () => {
+export const CreateRecipe = () => {
   // Define state variables for the form fields and ingredients list
-  const [name, setName] = useState<string>(''); // State for recipe name
-  const [description, setDescription] = useState<string>(''); // State for recipe description
-  const [ingredientName, setIngredientName] = useState<string>(''); // State for ingredient name
-  const [quantity, setQuantity] = useState<string>(''); // State for ingredient quantity
-  const [preparationMethod, setPreparationMethod] = useState<string>(''); // State for preparation method
-  const [cookingMethod, setCookingMethod] = useState<string>(''); // State for cooking method
+  const [name, setName] = useState<string>(""); // State for recipe name
+  const [description, setDescription] = useState<string>(""); // State for recipe description
+  const [ingredientName, setIngredientName] = useState<string>(""); // State for ingredient name
+  const [quantity, setQuantity] = useState<string>(""); // State for ingredient quantity
+  const [preparationMethod, setPreparationMethod] = useState<string>(""); // State for preparation method
+  const [cookingMethod, setCookingMethod] = useState<string>(""); // State for cooking method
   const [ingredients, setIngredients] = useState<Ingredient[]>([]); // State for list of ingredients
   const navigate = useNavigate(); // Hook to programmatically navigate between routes
 
@@ -29,10 +29,10 @@ const CreateRecipe = () => {
     // Update the ingredients list with the new ingredient
     setIngredients([...ingredients, newIngredient]);
     // Reset the ingredient form fields
-    setIngredientName('');
-    setQuantity('');
-    setPreparationMethod('');
-    setCookingMethod('');
+    setIngredientName("");
+    setQuantity("");
+    setPreparationMethod("");
+    setCookingMethod("");
   };
 
   // Function to handle adding a new recipe
@@ -46,23 +46,23 @@ const CreateRecipe = () => {
 
     try {
       // Send a POST request to the server to add the new recipe
-      const response = await fetch('http://localhost:5000/recipes', {
-        method: 'POST',
+      const response = await fetch("http://localhost:5000/recipes", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(newRecipe), // Send the new recipe data as JSON
       });
 
       // Check if the request was successful
       if (response.ok) {
-        alert('Recipe added successfully'); // Show success message
-        navigate('/view-recipes'); // Navigate to the view recipes page
+        alert("Recipe added successfully"); // Show success message
+        navigate("/view-recipes"); // Navigate to the view recipes page
       } else {
-        console.error('Failed to add recipe, status code:', response.status); // Log error if request failed
+        console.error("Failed to add recipe, status code:", response.status); // Log error if request failed
       }
     } catch (error) {
-      console.error('Error adding recipe:', error); // Log any error that occurs during the request
+      console.error("Error adding recipe:", error); // Log any error that occurs during the request
     }
   };
 
@@ -73,7 +73,8 @@ const CreateRecipe = () => {
       <div className={styles.formGroup}>
         <label className={styles.label}>
           Recipe Name:
-          <input className={styles.input}
+          <input
+            className={styles.input}
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)} // Update name state on input change
@@ -83,7 +84,8 @@ const CreateRecipe = () => {
       <div className={styles.formGroup}>
         <label className={styles.label}>
           Recipe Description:
-          <textarea className={styles.textarea}
+          <textarea
+            className={styles.textarea}
             value={description}
             onChange={(e) => setDescription(e.target.value)} // Update description state on textarea change
           />
@@ -94,7 +96,8 @@ const CreateRecipe = () => {
         <div className={styles.ingredientForm}>
           <label className={styles.label}>
             Ingredient Name:
-            <input className={styles.input}
+            <input
+              className={styles.input}
               type="text"
               value={ingredientName}
               onChange={(e) => setIngredientName(e.target.value)} // Update ingredientName state on input change
@@ -102,7 +105,8 @@ const CreateRecipe = () => {
           </label>
           <label className={styles.label}>
             Quantity:
-            <input className={styles.input}
+            <input
+              className={styles.input}
               type="text"
               value={quantity}
               onChange={(e) => setQuantity(e.target.value)} // Update quantity state on input change
@@ -110,7 +114,8 @@ const CreateRecipe = () => {
           </label>
           <label className={styles.label}>
             Preparation Method:
-            <input className={styles.input}
+            <input
+              className={styles.input}
               type="text"
               value={preparationMethod}
               onChange={(e) => setPreparationMethod(e.target.value)} // Update preparationMethod state on input change
@@ -118,13 +123,17 @@ const CreateRecipe = () => {
           </label>
           <label className={styles.label}>
             Cooking Method:
-            <input className={styles.input}
+            <input
+              className={styles.input}
               type="text"
               value={cookingMethod}
               onChange={(e) => setCookingMethod(e.target.value)} // Update cookingMethod state on input change
             />
           </label>
-          <button className={styles.button} onClick={handleAddIngredient}>Add Ingredient</button> {/* Call handleAddIngredient on button click */}
+          <button className={styles.button} onClick={handleAddIngredient}>
+            Add Ingredient
+          </button>{" "}
+          {/* Call handleAddIngredient on button click */}
         </div>
       </div>
       <div className={styles.ingredientList}>
@@ -133,14 +142,16 @@ const CreateRecipe = () => {
           {/* Map over the ingredients array to display each ingredient */}
           {ingredients.map((ingredient, index) => (
             <li key={index}>
-              {ingredient.name} - {ingredient.weight} - {ingredient.preparationType} - {ingredient.cookingMethod}
+              {ingredient.name} - {ingredient.weight} -{" "}
+              {ingredient.preparationType} - {ingredient.cookingMethod}
             </li>
           ))}
         </ul>
       </div>
-      <button className={styles.button} onClick={handleAddRecipe}>Add Recipe</button> {/* Call handleAddRecipe on button click */}
+      <button className={styles.button} onClick={handleAddRecipe}>
+        Add Recipe
+      </button>{" "}
+      {/* Call handleAddRecipe on button click */}
     </div>
   );
 };
-
-export default CreateRecipe; // Export the CreateRecipe component as the default export
