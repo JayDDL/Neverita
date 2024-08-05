@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int          @id @default(autoincrement())
+  name        String
+  email       String
+  recipies    Recipe[]
+  ingredients Ingredient[]
+  MealPlans   MealPlan[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @default(now())
+}
+
+model Recipe {
+  id               Int                @id @default(autoincrement())
+  User             User?              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId           Int?
+  name             String
+  description      String
+  recipeIngredient RecipeIngredient[]
+  breakfast        MealPlan[]         @relation("breakfast")
+  lunch            MealPlan[]         @relation("lunch")
+  dinner           MealPlan[]         @relation("dinner")
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @default(now())
+}
+
+model MealPlan {
+  id          Int      @id @default(autoincrement())
+  date        DateTime
+  breakfast   Recipe?  @relation("breakfast", fields: [breakfastId], references: [id])
+  breakfastId Int?
+  lunch       Recipe?  @relation("lunch", fields: [lunchId], references: [id])
+  lunchId     Int?
+  dinner      Recipe?  @relation("dinner", fields: [dinnerId], references: [id])
+  dinnerId    Int?
+  User        User?    @relation(fields: [userId], references: [id])
+  userId      Int?
+}
+
+model Ingredient {
+  id               Int                @id @default(autoincrement())
+  name             String             @unique
+  recipeIngredient RecipeIngredient[]
+  User             User?              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId           Int?
+}
+
+model RecipeIngredient {
+  id              Int         @id @default(autoincrement())
+  cookingMethod   String
+  preparationType String
+  quantity        String
+  Ingredients     Ingredient? @relation(fields: [ingredientsId], references: [id], onDelete: Cascade)
+  ingredientsId   Int?
+  Recipe          Recipe?     @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  recipeId        Int?
+}
