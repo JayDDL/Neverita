@@ -1,17 +1,21 @@
 import express from "express";
 import {
-	getAllRecipes,
-	createRecipe,
-	getRecipeById,
+	createRecipeController,
+	getAllRecipesController,
+	deleteRecipeByIdController,
+	getRecipeByIdController,
 } from "../Controllers/recipeController";
 
-export const recipeRouter = express.Router(); // Create a new router object for recipes
+export const recipeRouter = express.Router({ mergeParams: true });
 
-// GET all recipes
-recipeRouter.get("/", getAllRecipes);
+// GET: All recipes
+recipeRouter.get("/", getAllRecipesController);
 
-// GET a recipe by ID
-recipeRouter.get("/:id", getRecipeById);
+// GET: Recipe by ID
+recipeRouter.get("/:recipeId", getRecipeByIdController);
 
-// POST a new recipe
-recipeRouter.post("/", createRecipe);
+// DELETE: Recipe by ID
+recipeRouter.get("/:recipeId", deleteRecipeByIdController);
+
+// POST: Create new recipe
+recipeRouter.post("/", createRecipeController);

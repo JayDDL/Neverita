@@ -1,13 +1,20 @@
 import express from "express";
 import {
-	getAllMealPlans,
-	createMealPlan,
+	getAllMealPlansController,
+	createMealPlanController,
+	updateMealPlanController,
+	deleteMealPlanController,
+	getMealPlanByDateController,
 } from "../Controllers/mealPlanController";
 
-export const mealPlanRouter = express.Router();
+export const mealPlanRouter = express.Router({ mergeParams: true });
 
-// Define a route to get all meal plans
-mealPlanRouter.get("/", getAllMealPlans);
+mealPlanRouter.get("/", getAllMealPlansController);
 
-// Define a route to create a new meal plan
-mealPlanRouter.post("/", createMealPlan);
+mealPlanRouter.get("/:date", getMealPlanByDateController);
+
+mealPlanRouter.post("/", createMealPlanController);
+
+mealPlanRouter.put("/:mealPlanId", updateMealPlanController);
+
+mealPlanRouter.delete("/:mealPlanId", deleteMealPlanController);

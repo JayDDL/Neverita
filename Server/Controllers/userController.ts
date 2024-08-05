@@ -7,7 +7,10 @@ import User from "../models/user"; // For when we add real User functionality, n
 const mockUser = { id: 1, name: "TestUser1", email: "testuser1@example.com" };
 
 // Function to get the mock user
-export const getUser = async (req: Request, res: Response): Promise<void> => {
+export const getUserController = async (
+	req: Request,
+	res: Response,
+): Promise<void> => {
 	try {
 		// Send the mock user as a JSON response with a status code of 200
 		res.status(200).json(mockUser); // Returns the mock user
@@ -18,7 +21,7 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
 };
 
 // Function to create the mock user
-export const createUser = async (
+export const createUserController = async (
 	req: Request,
 	res: Response,
 ): Promise<void> => {
