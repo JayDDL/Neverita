@@ -4,7 +4,7 @@ const cors = require('cors'); // Import the CORS middleware
 const { sequelize } = require('./models'); // Import Sequelize models
 
 const app = express(); // Create an instance of the Express application
-const PORT = process.env.PORT || 5000; // Set the port number
+const PORT = process.env.PORT || 3000; // Set the port number
 
 // Middleware
 app.use(bodyParser.json()); // Use body-parser middleware to parse JSON requests

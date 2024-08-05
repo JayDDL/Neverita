@@ -10,7 +10,7 @@ const RecipeDetails = () => {
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/recipes/${id}`);
+        const response = await fetch(`http://localhost:3000/recipes/${id}`);
         if (response.ok) {
           const data = await response.json();
           setRecipe(data); // Set the fetched recipe data to the state

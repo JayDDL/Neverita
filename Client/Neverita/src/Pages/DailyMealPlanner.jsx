@@ -34,7 +34,7 @@ const DailyMealPlanner = () => {
   // Function to fetch recipes from the server
   const fetchRecipes = async () => {
     try {
-      const response = await fetch('http://localhost:5000/recipes');
+      const response = await fetch('http://localhost:3000/recipes');
       if (response.ok) {
         const data = await response.json();
         setRecipes(data);
@@ -49,7 +49,7 @@ const DailyMealPlanner = () => {
   // Function to fetch the meal plan for a specific date from the server
   const fetchMealPlan = async (date) => {
     try {
-      const response = await fetch(`http://localhost:5000/daily-meal-plans/${date.toISOString().split('T')[0]}`);
+      const response = await fetch(`http://localhost:3000/daily-meal-plans/${date.toISOString().split('T')[0]}`);
       if (response.ok) {
         const data = await response.json();
         if (data) {
@@ -107,7 +107,7 @@ const DailyMealPlanner = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:5000/daily-meal-plans', {
+      const response = await fetch('http://localhost:3000/daily-meal-plans', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

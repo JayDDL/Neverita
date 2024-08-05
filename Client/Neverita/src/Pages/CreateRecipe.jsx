@@ -45,7 +45,7 @@ const CreateRecipe = () => {
 
     try {
       // Send a POST request to the server to add the new recipe
-      const response = await fetch('http://localhost:5000/recipes', {
+      const response = await fetch('http://localhost:3000/recipes', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
