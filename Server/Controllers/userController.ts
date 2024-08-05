@@ -1,8 +1,4 @@
 import type { Request, Response } from "express";
-
-// Import the User model from the models directory
-import User from "../models/user"; // For when we add real User functionality, not used at the moment due to us using mock user instead
-
 // Define a mock user for testing purposes
 const mockUser = { id: 1, name: "TestUser1", email: "testuser1@example.com" };
 
@@ -15,8 +11,9 @@ export const getUserController = async (
 		// Send the mock user as a JSON response with a status code of 200
 		res.status(200).json(mockUser); // Returns the mock user
 	} catch (error) {
+		const typedError = error as Error;
 		// Send an error message as a JSON response with a status code of 500 if an error occurs
-		res.status(500).json({ error: error.message });
+		res.status(500).json({ error: typedError.message });
 	}
 };
 
@@ -29,6 +26,7 @@ export const createUserController = async (
 		// Assuming the mock user is created
 		res.status(201).json(mockUser); // Returns the mock user
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		const typedError = error as Error;
+		res.status(500).json({ error: typedError.message });
 	}
 };

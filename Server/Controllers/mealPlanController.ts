@@ -1,5 +1,4 @@
 // Import the MealPlan model from the models directory
-const { MealPlan } = require("../models");
 import type { Request, Response } from "express";
 import {
 	createMealPlanModel,
@@ -7,7 +6,7 @@ import {
 	getAllMealPlansModel,
 	getMealPlanByDateModel,
 	updateMealPlanModel,
-} from "../new-models/mealPlanModels";
+} from "../models/mealPlanModels";
 
 // Function to get all meal plans
 export const getAllMealPlansController = async (
@@ -20,7 +19,8 @@ export const getAllMealPlansController = async (
 		const mealPlans = await getAllMealPlansModel(userIdNum);
 		res.status(200).json(mealPlans); // Returns all meal plans
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		const typedError = error as Error;
+		res.status(500).json({ error: typedError.message });
 	}
 };
 
@@ -36,7 +36,8 @@ export const getMealPlanByDateController = async (
 		const mealPlan = await getMealPlanByDateModel(userIdNum, dateNum);
 		res.status(200).json(mealPlan);
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		const typedError = error as Error;
+		res.status(500).json({ error: typedError.message });
 	}
 };
 
@@ -51,7 +52,8 @@ export const createMealPlanController = async (
 		const mealPlan = await createMealPlanModel(userIdNum, req.body);
 		res.status(201).json(mealPlan);
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		const typedError = error as Error;
+		res.status(500).json({ error: typedError.message });
 	}
 };
 
@@ -72,7 +74,8 @@ export const updateMealPlanController = async (
 		);
 		res.status(201).json(mealPlan);
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		const typedError = error as Error;
+		res.status(500).json({ error: typedError.message });
 	}
 };
 
@@ -89,6 +92,7 @@ export const deleteMealPlanController = async (
 		await deleteMealPlanModel(userIdNum, mealPlanIdNum);
 		res.status(200).json({ message: "Meal plan deleted successfully" });
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		const typedError = error as Error;
+		res.status(500).json({ error: typedError.message });
 	}
 };

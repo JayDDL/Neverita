@@ -4,7 +4,7 @@ import {
 	deleteRecipeByIdModel,
 	getAllRecipesModel,
 	getRecipeByIdModel,
-} from "../new-models/recipeModels";
+} from "../models/recipeModels";
 
 export const getAllRecipesController = async (
 	req: Request,
@@ -16,7 +16,8 @@ export const getAllRecipesController = async (
 		const recipes = await getAllRecipesModel(userIdNum);
 		res.status(200).json(recipes);
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		const typedError = error as Error;
+		res.status(500).json({ error: typedError.message });
 	}
 };
 
@@ -38,7 +39,8 @@ export const getRecipeByIdController = async (
 			res.status(404).json({ error: "Recipe ID not found" });
 		}
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		const typedError = error as Error;
+		res.status(500).json({ error: typedError.message });
 	}
 };
 
@@ -54,7 +56,8 @@ export const deleteRecipeByIdController = async (
 		const deletedRecipe = deleteRecipeByIdModel(userIdNum, recipeIdNum);
 		res.status(200).json(deletedRecipe);
 	} catch (err) {
-		res.status(500).json({ error: err.msg });
+		const typedError = err as Error;
+		res.status(500).json({ error: typedError.message });
 	}
 };
 
@@ -76,6 +79,7 @@ export const createRecipeController = async (
 		const newRecipeData = await getRecipeByIdModel(userIdNum, newRecipe.id);
 		res.status(201).json(newRecipeData);
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		const typedError = error as Error;
+		res.status(500).json({ error: typedError.message });
 	}
 };
