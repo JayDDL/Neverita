@@ -1,11 +1,12 @@
-import { RecipeProps } from '../types';
-import './RecipeList.css';
+import { RecipeProps } from "../../types";
+import "./RecipeList.css";
 
 // Define the RecipeList functional component, which takes recipes and onViewClick as props
-const RecipeList = ({ recipes, onViewClick } : RecipeProps ) => {
+export const RecipeList = ({ recipes, onViewClick }: RecipeProps) => {
+  console.log(recipes)
   return (
     <div className="recipe-list">
-      {recipes.map(recipe => (
+      {recipes.map((recipe) => (
         <div key={recipe.id} className="recipe-item">
           <div>
             <div className="recipe-title">{recipe.name}</div>

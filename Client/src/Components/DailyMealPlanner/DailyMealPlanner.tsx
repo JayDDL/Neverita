@@ -1,8 +1,8 @@
 import { useEffect, useState, ChangeEvent } from "react";
 import "./DailyMealPlanner.css";
-import { DailyMealPlan, Recipe, SelectedMeals } from "../types";
+import { DailyMealPlan, Recipe, SelectedMeals } from "../../types";
 
-const DailyMealPlanner = () => {
+export const DailyMealPlanner = () => {
   // State to manage the current date
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
 
@@ -151,8 +151,7 @@ const DailyMealPlanner = () => {
 
   // Function to handle changes in the search input
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
-      setSearchQuery(event.target.value);
-    
+    setSearchQuery(event.target.value);
   };
 
   // Filter recipes based on the search query
@@ -251,5 +250,3 @@ const DailyMealPlanner = () => {
     </div>
   );
 };
-
-export default DailyMealPlanner;

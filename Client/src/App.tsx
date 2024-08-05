@@ -1,10 +1,10 @@
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import ViewRecipes from './Pages/ViewRecipes';
-import RecipeDetails from './Pages/RecipeDetails';
-import CreateRecipe from './Pages/CreateRecipe';
-import DailyMealPlanner from './Pages/DailyMealPlanner';
-import WeeklyMealPlanner from './Pages/WeeklyMealPlanner';
-import './App.css'
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import { ViewRecipes } from "./Components/ViewRecipes/ViewRecipes";
+import { RecipeDetails } from "./Components/RecipeDetails/RecipeDetails";
+import { CreateRecipe } from "./Components/CreateRecipe/CreateRecipe";
+import { DailyMealPlanner } from "./Components/DailyMealPlanner/DailyMealPlanner";
+import { WeeklyMealPlanner } from "./Components/WeeklyMealPlanner/WeeklyMealPlanner";
+import "./App.css";
 
 const App = () => {
   return (

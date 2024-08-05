@@ -1,11 +1,11 @@
 // Import necessary hooks from 'react' and 'react-router-dom'
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import RecipeList from '../Components/RecipeList'; // Import the RecipeList component
-import './ViewRecipes.css';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import RecipeList from "../RecipeList/RecipeList";
+import "./ViewRecipes.css";
 
 // Define the ViewRecipes functional component
-const ViewRecipes = () => {
+export const ViewRecipes = () => {
   const [recipes, setRecipes] = useState([]); // State for storing the list of recipes
   const navigate = useNavigate(); // Hook to programmatically navigate between routes
 
@@ -13,15 +13,18 @@ const ViewRecipes = () => {
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const response = await fetch('http://localhost:5000/recipes');
+        const response = await fetch("http://localhost:5000/recipes");
         if (response.ok) {
           const data = await response.json();
           setRecipes(data); // Set the fetched recipes data to the state
         } else {
-          console.error('Failed to fetch recipes, status code:', response.status); // Log error if request failed
+          console.error(
+            "Failed to fetch recipes, status code:",
+            response.status
+          ); // Log error if request failed
         }
       } catch (error) {
-        console.error('Error fetching recipes:', error); // Log any error that occurs during the request
+        console.error("Error fetching recipes:", error); // Log any error that occurs during the request
       }
     };
 
@@ -29,7 +32,7 @@ const ViewRecipes = () => {
   }, []); // Empty dependency array to run the effect only once
 
   // Function to handle clicking the view button for a recipe
-  const handleViewClick = (id:number) => {
+  const handleViewClick = (id: number) => {
     navigate(`/recipe/${id}`); // Navigate to the recipe details page for the selected recipe
   };
 
@@ -37,9 +40,7 @@ const ViewRecipes = () => {
   return (
     <div className="container">
       <h1>Recipes</h1>
-      <RecipeList recipes={recipes} onViewClick={handleViewClick} /> {/* Render the RecipeList component */}
+      <RecipeList recipes={recipes} onViewClick={handleViewClick} />{" "}
     </div>
   );
 };
-
-export default ViewRecipes; // Export the ViewRecipes component as the default export

@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./RecipeDetails.css";
 
-import { Recipe } from "../types";
+import { Ingredient, Recipe } from "../../types";
 
-const RecipeDetails = () => {
+export const RecipeDetails = () => {
   const { id } = useParams();
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [diet, setDiet] = useState<string>("");
@@ -15,28 +15,36 @@ const RecipeDetails = () => {
       setIsLoading(true);
       try {
         // Fetch recipe
-        const recipeResponse = await fetch(`http://localhost:5000/recipes/${id}`);
+        const recipeResponse = await fetch(
+          `http://localhost:5000/recipes/${id}`
+        );
         if (!recipeResponse.ok) {
-          throw new Error(`Failed to fetch recipe details, status code: ${recipeResponse.status}`);
+          throw new Error(
+            `Failed to fetch recipe details, status code: ${recipeResponse.status}`
+          );
         }
         const recipeData = await recipeResponse.json();
         setRecipe(recipeData);
 
         // Fetch diet
-        const ingredientNames = recipeData.ingredients.map((ingredient: any) => ingredient.name);
+        const ingredientNames = recipeData.ingredients.map(
+          (ingredient: Ingredient) => ingredient.name
+        );
         const dietResponse = await fetch("http://localhost:5001/diet", {
           method: "POST",
           body: JSON.stringify({ ingredients: ingredientNames }),
           headers: { "Content-Type": "application/json" },
         });
         if (!dietResponse.ok) {
-          throw new Error(`Failed to fetch diet, status code: ${dietResponse.status}`);
+          throw new Error(
+            `Failed to fetch diet, status code: ${dietResponse.status}`
+          );
         }
         const dietData = await dietResponse.json();
         setDiet(dietData.result);
       } catch (error) {
         console.error("Error fetching data:", error);
-      } 
+      }
       setIsLoading(false);
     };
     fetchRecipeAndDiet();
@@ -55,7 +63,7 @@ const RecipeDetails = () => {
       <h1>{recipe.name}</h1>
       <h2>Description</h2>
       <p>{recipe.description}</p>
-      {diet && <p>Diet: {diet}</p> }
+      {diet && <p>Diet: {diet}</p>}
       <h2>Ingredients</h2>
       <table className="ingredients-table">
         <thead>
@@ -80,5 +88,3 @@ const RecipeDetails = () => {
     </div>
   );
 };
-
-export default RecipeDetails;

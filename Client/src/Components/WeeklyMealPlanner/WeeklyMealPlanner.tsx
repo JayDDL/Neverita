@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback, ChangeEvent } from "react";
 import "./WeeklyMealPlanner.css";
-import { DailyMealPlan, Recipe, SelectedMeals } from "../types";
+import { DailyMealPlan, Recipe, SelectedMeals } from "../../types";
 
-const WeeklyMealPlanner = () => {
+export  const WeeklyMealPlanner = () => {
   const [currentWeek, setCurrentWeek] = useState(getCurrentWeek());
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [mealPlans, setMealPlans] = useState<SelectedMeals[]>(
@@ -342,4 +342,3 @@ const initializeMealPlans = () => {
   }));
 };
 
-export default WeeklyMealPlanner;
