@@ -25,7 +25,7 @@ export const CreateRecipe = () => {
       preparationType: preparationMethod,
       cookingMethod: cookingMethod,
     };
-
+    if (ingredientName) {
     // Update the ingredients list with the new ingredient
     setIngredients([...ingredients, newIngredient]);
     // Reset the ingredient form fields
@@ -33,6 +33,7 @@ export const CreateRecipe = () => {
     setQuantity("");
     setPreparationMethod("");
     setCookingMethod("");
+    }
   };
 
   // Function to handle adding a new recipe
@@ -44,25 +45,27 @@ export const CreateRecipe = () => {
       ingredients,
     };
 
-    try {
-      // Send a POST request to the server to add the new recipe
-      const response = await fetch("http://localhost:5000/recipes", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newRecipe), // Send the new recipe data as JSON
-      });
+    if (name && description && ingredients) {
+      try {
+        // Send a POST request to the server to add the new recipe
+        const response = await fetch("http://localhost:5000/recipes", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newRecipe), // Send the new recipe data as JSON
+        });
 
-      // Check if the request was successful
-      if (response.ok) {
-        alert("Recipe added successfully"); // Show success message
-        navigate("/view-recipes"); // Navigate to the view recipes page
-      } else {
-        console.error("Failed to add recipe, status code:", response.status); // Log error if request failed
+        // Check if the request was successful
+        if (response.ok) {
+          alert("Recipe added successfully"); // Show success message
+          navigate("/view-recipes"); // Navigate to the view recipes page
+        } else {
+          console.error("Failed to add recipe, status code:", response.status); // Log error if request failed
+        }
+      } catch (error) {
+        console.error("Error adding recipe:", error); // Log any error that occurs during the request
       }
-    } catch (error) {
-      console.error("Error adding recipe:", error); // Log any error that occurs during the request
     }
   };
 

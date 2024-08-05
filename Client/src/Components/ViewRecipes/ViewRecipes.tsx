@@ -41,7 +41,6 @@ export const ViewRecipes = () => {
     <div className="container">
       <h1>Recipes</h1>
       <RecipeList recipes={recipes} onViewClick={handleViewClick} />{" "}
-      {/* Render the RecipeList component */}
     </div>
   );
 };
