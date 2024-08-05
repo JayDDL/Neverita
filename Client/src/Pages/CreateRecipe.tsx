@@ -2,17 +2,18 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './CreateRecipe.module.css';
+import { Ingredient } from '../types';
 
 // Define the CreateRecipe functional component
 const CreateRecipe = () => {
   // Define state variables for the form fields and ingredients list
-  const [name, setName] = useState(''); // State for recipe name
-  const [description, setDescription] = useState(''); // State for recipe description
-  const [ingredientName, setIngredientName] = useState(''); // State for ingredient name
-  const [quantity, setQuantity] = useState(''); // State for ingredient quantity
-  const [preparationMethod, setPreparationMethod] = useState(''); // State for preparation method
-  const [cookingMethod, setCookingMethod] = useState(''); // State for cooking method
-  const [ingredients, setIngredients] = useState([]); // State for list of ingredients
+  const [name, setName] = useState<string>(''); // State for recipe name
+  const [description, setDescription] = useState<string>(''); // State for recipe description
+  const [ingredientName, setIngredientName] = useState<string>(''); // State for ingredient name
+  const [quantity, setQuantity] = useState<string>(''); // State for ingredient quantity
+  const [preparationMethod, setPreparationMethod] = useState<string>(''); // State for preparation method
+  const [cookingMethod, setCookingMethod] = useState<string>(''); // State for cooking method
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]); // State for list of ingredients
   const navigate = useNavigate(); // Hook to programmatically navigate between routes
 
   // Function to handle adding an ingredient to the list
