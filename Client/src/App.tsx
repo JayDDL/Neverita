@@ -5,8 +5,12 @@ import { CreateRecipe } from "./Components/CreateRecipe/CreateRecipe";
 import { DailyMealPlanner } from "./Components/DailyMealPlanner/DailyMealPlanner";
 import { WeeklyMealPlanner } from "./Components/WeeklyMealPlanner/WeeklyMealPlanner";
 import "./App.css";
+import { useState } from "react";
 
 const App = () => {
+
+  const [userId, setUserId] = useState(1)
+
   return (
     <Router>
       <div>
@@ -27,11 +31,11 @@ const App = () => {
           </ul>
         </nav>
         <Routes>
-          <Route path="/view-recipes" element={<ViewRecipes />} />
-          <Route path="/recipe/:id" element={<RecipeDetails />} />
-          <Route path="/create-recipe" element={<CreateRecipe />} />
-          <Route path="/daily-meal-planner" element={<DailyMealPlanner />} />
-          <Route path="/weekly-meal-planner" element={<WeeklyMealPlanner />} />
+          <Route path="/view-recipes" element={<ViewRecipes userId = {userId} />} />
+          <Route path="/recipe/:recipeId" element={<RecipeDetails userId={userId}/>} />
+          <Route path="/create-recipe" element={<CreateRecipe userId = {userId} />} />
+          <Route path="/daily-meal-planner" element={<DailyMealPlanner userId = {userId}/>} />
+          <Route path="/weekly-meal-planner" element={<WeeklyMealPlanner userId = {userId} />} />
         </Routes>
       </div>
     </Router>

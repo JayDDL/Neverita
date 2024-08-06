@@ -5,15 +5,15 @@ import RecipeList from "../RecipeList/RecipeList";
 import "./ViewRecipes.css";
 
 // Define the ViewRecipes functional component
-export const ViewRecipes = () => {
+export const ViewRecipes = ({userId}: {userId: number}) => {
   const [recipes, setRecipes] = useState([]); // State for storing the list of recipes
   const navigate = useNavigate(); // Hook to programmatically navigate between routes
-
+  console.log(userId)
   // useEffect hook to fetch recipes when the component mounts
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const response = await fetch("http://localhost:5000/recipes");
+        const response = await fetch(`http://localhost:3000/user/${userId}/recipes`);
         if (response.ok) {
           const data = await response.json();
           setRecipes(data); // Set the fetched recipes data to the state
@@ -29,7 +29,7 @@ export const ViewRecipes = () => {
     };
 
     fetchRecipes(); // Call the function to fetch the recipes
-  }, []); // Empty dependency array to run the effect only once
+  }, [userId]); // Empty dependency array to run the effect only once
 
   // Function to handle clicking the view button for a recipe
   const handleViewClick = (id: number) => {

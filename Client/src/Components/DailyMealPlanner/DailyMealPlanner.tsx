@@ -2,18 +2,27 @@ import { useEffect, useState, ChangeEvent } from "react";
 import "./DailyMealPlanner.css";
 import { DailyMealPlan, Recipe, SelectedMeals } from "../../types";
 
-export const DailyMealPlanner = () => {
+export const DailyMealPlanner = ({ userId }: { userId: number }) => {
+  let initDate: Date | number = new Date();
+  initDate.setHours(1);
+  initDate.setMinutes(0);
+  initDate.setSeconds(0);
+  initDate.setMilliseconds(0);
+  initDate = initDate.getTime();
+
   // State to manage the current date
-  const [currentDate, setCurrentDate] = useState<Date>(new Date());
+  const [currentDate, setCurrentDate] = useState<Date>(new Date(initDate));
 
   // State to manage the list of recipes
   const [recipes, setRecipes] = useState<Recipe[]>([]);
 
+  const [mealPlanId, setMealPlanId] = useState<number | null>();
+
   // State to manage selected meals for breakfast, lunch, and dinner
   const [selectedMeals, setSelectedMeals] = useState<SelectedMeals>({
-    breakfast: "",
-    lunch: "",
-    dinner: "",
+    breakfast: null,
+    lunch: null,
+    dinner: null,
   });
 
   // State to manage the current meal type being added (breakfast, lunch, or dinner)
@@ -35,7 +44,9 @@ export const DailyMealPlanner = () => {
   // Function to fetch recipes from the server
   const fetchRecipes = async () => {
     try {
-      const response = await fetch("http://localhost:5000/recipes");
+      const response = await fetch(
+        `http://localhost:3000/user/${userId}/recipes`
+      );
       if (response.ok) {
         const data = await response.json();
         setRecipes(data);
@@ -51,79 +62,87 @@ export const DailyMealPlanner = () => {
   const fetchMealPlan = async (date: Date) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/daily-meal-plans/${
-          date.toISOString().split("T")[0]
-        }`
+        `http://localhost:3000/user/${userId}/mealplans/${date.getTime()}`
       );
       if (response.ok) {
         const data = await response.json();
         if (data) {
           setSelectedMeals({
-            breakfast: data.breakfast || "",
-            lunch: data.lunch || "",
-            dinner: data.dinner || "",
+            breakfast: data.breakfast || null,
+            lunch: data.lunch || null,
+            dinner: data.dinner || null,
           });
-        }
-      } else {
+          setMealPlanId(data.id);
+        } else {
+        setMealPlanId(null)
         setSelectedMeals({
-          breakfast: "",
-          lunch: "",
-          dinner: "",
+          breakfast: null,
+          lunch: null,
+          dinner: null,
         });
       }
+    }
     } catch (error) {
       console.error("Error fetching meal plan:", error);
       setSelectedMeals({
-        breakfast: "",
-        lunch: "",
-        dinner: "",
+        breakfast: null,
+        lunch: null,
+        dinner: null,
       });
     }
   };
 
   // Function to handle selecting a recipe for a meal
   const handleSelectRecipe = (recipe: Recipe) => {
-    console.log(recipe);
     if (currentMealType) {
-      setSelectedMeals((prevSelectedMeals) => ({
-        ...prevSelectedMeals,
-        [currentMealType]: recipe,
-      }));
+      setSelectedMeals((prevSelectedMeals) => {
+        const isAlreadySelected =
+          prevSelectedMeals[currentMealType as keyof typeof prevSelectedMeals]
+            ?.id === recipe.id;
+        return {
+          ...prevSelectedMeals,
+          [currentMealType]: isAlreadySelected ? null : recipe,
+        };
+      });
     }
     setCurrentMealType(null);
   };
 
   // Function to handle clicking the add button for a meal
   const handleAddButtonClick = (mealType: string) => {
-    console.log(mealType);
     setCurrentMealType(mealType);
   };
 
   // Function to handle saving the meal plan to the server
   const handleSaveMealPlan = async () => {
     const mealPlan: DailyMealPlan = {
-      date: currentDate.toISOString().split("T")[0], // Format as YYYY-MM-DD
-      breakfastId:
-        typeof selectedMeals.breakfast == "string"
-          ? selectedMeals.breakfast
-          : selectedMeals.breakfast.id,
-      lunchId:
-        typeof selectedMeals.lunch == "string"
-          ? selectedMeals.lunch
-          : selectedMeals.lunch.id,
-      dinnerId:
-        typeof selectedMeals.dinner == "string"
-          ? selectedMeals.dinner
-          : selectedMeals.dinner.id,
+      date: currentDate.getTime(),
+      breakfastId: selectedMeals.breakfast ? selectedMeals.breakfast.id : null,
+      lunchId: selectedMeals.lunch ? selectedMeals.lunch.id : null,
+      dinnerId: selectedMeals.dinner ? selectedMeals.dinner.id : null,
     };
-
     try {
-      const response = await fetch("http://localhost:5000/daily-meal-plans", {
-        method: "POST",
+      let method,body;
+      if(mealPlanId){
+        method = "PUT"
+        body = {
+          breakfastId: mealPlan.breakfastId,
+          lunchId : mealPlan.lunchId,
+          dinnerId: mealPlan.dinnerId,
+        }
+      } else {
+        method= 'POST'
+        body = mealPlan
+      } 
+      const url = mealPlanId
+        ? `http://localhost:3000/user/${userId}/mealplans/${mealPlanId}`
+        : `http://localhost:3000/user/${userId}/mealplans`;
+      const response = await fetch(url, {
+        method: method,
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(mealPlan),
+        body: JSON.stringify(body),
       });
 
       if (response.ok) {
@@ -141,7 +160,6 @@ export const DailyMealPlanner = () => {
 
   // Function to handle changing the current date
   const handleDayChange = (direction: string) => {
-    console.log(direction);
     setCurrentDate((prevDate) => {
       const newDate = new Date(prevDate);
       newDate.setDate(newDate.getDate() + (direction === "prev" ? -1 : 1));
@@ -184,18 +202,18 @@ export const DailyMealPlanner = () => {
                 Add
               </button>
               <p>
-                {typeof selectedMeals.breakfast == "string"
-                  ? "No selection"
-                  : selectedMeals.breakfast.name}
+                {selectedMeals.breakfast
+                  ? selectedMeals.breakfast.name
+                  : "No Selection"}
               </p>
             </div>
             <div className="meal">
               <h3>Lunch</h3>
               <button onClick={() => handleAddButtonClick("lunch")}>Add</button>
               <p>
-                {typeof selectedMeals.lunch == "string"
-                  ? "No selection"
-                  : selectedMeals.lunch.name}
+                {selectedMeals.lunch
+                  ? selectedMeals.lunch.name
+                  : "No Selection"}
               </p>
             </div>
             <div className="meal">
@@ -204,9 +222,9 @@ export const DailyMealPlanner = () => {
                 Add
               </button>
               <p>
-                {typeof selectedMeals.dinner == "string"
-                  ? "No selection"
-                  : selectedMeals.dinner.name}
+                {selectedMeals.dinner
+                  ? selectedMeals.dinner.name
+                  : "No Selection"}
               </p>
             </div>
           </div>
@@ -230,11 +248,11 @@ export const DailyMealPlanner = () => {
                   key={index}
                   onClick={() => handleSelectRecipe(recipe)}
                   className={
-                    (typeof selectedMeals.breakfast != "string" &&
+                    (selectedMeals.breakfast &&
                       recipe.id === selectedMeals.breakfast.id) ||
-                    (typeof selectedMeals.lunch != "string" &&
+                    (selectedMeals.lunch &&
                       recipe.id === selectedMeals.lunch?.id) ||
-                    (typeof selectedMeals.dinner != "string" &&
+                    (selectedMeals.dinner &&
                       recipe.id === selectedMeals.dinner?.id)
                       ? "selected"
                       : ""
