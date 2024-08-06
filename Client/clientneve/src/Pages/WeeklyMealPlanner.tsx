@@ -49,7 +49,7 @@ const WeeklyMealPlanner: React.FC = () => {
     try {
       const response = await fetch("http://localhost:3000/recipes");
       if (response.ok) {
-        const data = await response.json();
+        const data: Recipe[] = await response.json();
         setRecipes(data);
       } else {
         console.error("Failed to fetch recipes, status code:", response.status);
@@ -108,7 +108,10 @@ const WeeklyMealPlanner: React.FC = () => {
     setMealPlans((prevMealPlans) => {
       const updatedMealPlans = [...prevMealPlans];
       if (currentDay !== null && currentMealType) {
-        updatedMealPlans[currentDay][currentMealType] = recipe;
+        updatedMealPlans[currentDay][currentMealType] = {
+          ...recipe,
+          id: recipe.id.toString(), // Convert Recipe.id to string
+        };
       }
       return updatedMealPlans;
     });
@@ -293,11 +296,11 @@ const WeeklyMealPlanner: React.FC = () => {
                     onClick={() => handleSelectRecipe(recipe)}
                     className={
                       currentDay !== null &&
-                      (recipe.id ===
+                      (recipe.id.toString() ===
                         (mealPlans[currentDay]?.breakfast as Meal)?.id ||
-                        recipe.id ===
+                        recipe.id.toString() ===
                           (mealPlans[currentDay]?.lunch as Meal)?.id ||
-                        recipe.id ===
+                        recipe.id.toString() ===
                           (mealPlans[currentDay]?.dinner as Meal)?.id)
                         ? "selected"
                         : ""

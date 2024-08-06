@@ -37,4 +37,4 @@ const ViewRecipes = () => {
   );
 };
 
-export default ViewRecipes; // Export the ViewRecipes component as the default export
+export default ViewRecipes;
