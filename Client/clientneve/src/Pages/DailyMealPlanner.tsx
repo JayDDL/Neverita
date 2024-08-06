@@ -29,7 +29,7 @@ const DailyMealPlanner: React.FC = () => {
 
   const fetchRecipes = async () => {
     try {
-      const response = await fetch("http://localhost:5000/recipes");
+      const response = await fetch("http://localhost:3000/recipes");
       if (response.ok) {
         const data = await response.json();
         setRecipes(data);
@@ -44,7 +44,7 @@ const DailyMealPlanner: React.FC = () => {
   const fetchMealPlan = async (date: Date) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/daily-meal-plans/${
+        `http://localhost:3000/daily-meal-plans/${
           date.toISOString().split("T")[0]
         }`
       );
@@ -105,7 +105,7 @@ const DailyMealPlanner: React.FC = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:5000/daily-meal-plans", {
+      const response = await fetch("http://localhost:3000/daily-meal-plans", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
