@@ -1,8 +1,7 @@
-import { useState, useEffect, useCallback, ChangeEvent } from "react";
-import "./WeeklyMealPlanner.css";
+import { useState, useEffect, useCallback, ChangeEvent, useRef } from "react";
 import { DailyMealPlan, Recipe, SelectedMeals } from "../../types";
 
-export  const WeeklyMealPlanner = () => {
+export const WeeklyMealPlanner = ({ userId }: { userId: number }) => {
   const [currentWeek, setCurrentWeek] = useState(getCurrentWeek());
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [mealPlans, setMealPlans] = useState<SelectedMeals[]>(
@@ -11,11 +10,13 @@ export  const WeeklyMealPlanner = () => {
   const [currentMealType, setCurrentMealType] = useState<string | null>(null);
   const [currentDay, setCurrentDay] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const mealPlanIdRef = useRef<(number | null)[]>(Array(7).fill(null));
 
-  // Function to fetch recipes from the server
   const fetchRecipes = useCallback(async () => {
     try {
-      const response = await fetch("http://localhost:5000/recipes");
+      const response = await fetch(
+        `http://localhost:3000/user/${userId}/recipes`
+      );
       if (response.ok) {
         const data = await response.json();
         setRecipes(data);
@@ -25,42 +26,42 @@ export  const WeeklyMealPlanner = () => {
     } catch (error) {
       console.error("Error fetching recipes:", error);
     }
-  }, []);
+  }, [userId]);
 
-  // Function to fetch the meal plan for a specific date from the server
-  const fetchMealPlanByDate = async (date: string) => {
+  const fetchMealPlanByDate = async (date: number, index: number) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/daily-meal-plans/${date}`
+        `http://localhost:3000/user/${userId}/mealplans/${date}`
       );
       if (response.ok) {
         const data = await response.json();
+        mealPlanIdRef.current[index] = data.id;
+        console.log(`Fetched meal plan ID for day ${index}:`, data.id);
         return {
-          breakfast: data.breakfast || "",
-          lunch: data.lunch || "",
-          dinner: data.dinner || "",
+          breakfast: data.breakfast || null,
+          lunch: data.lunch || null,
+          dinner: data.dinner || null,
         };
       } else {
         console.error(
           "Failed to fetch meal plan, status code:",
           response.status
         );
-        return { breakfast: "", lunch: "", dinner: "" };
+        return { breakfast: null, lunch: null, dinner: null };
       }
     } catch (error) {
       console.error("Error fetching meal plan:", error);
-      return { breakfast: "", lunch: "", dinner: "" };
+      return { breakfast: null, lunch: null, dinner: null };
     }
   };
 
-  // Function to fetch weekly meal plans from the server
   const fetchWeeklyMealPlans = useCallback(async (weekStartDate: string) => {
     const promises = [];
     for (let i = 0; i < 7; i++) {
       const date = new Date(weekStartDate);
       date.setDate(date.getDate() + i);
-      const formattedDate = date.toISOString().split("T")[0];
-      promises.push(fetchMealPlanByDate(formattedDate));
+      const dateTimestamp = date.getTime();
+      promises.push(fetchMealPlanByDate(dateTimestamp, i));
     }
     const results = await Promise.all(promises);
     setMealPlans(results);
@@ -69,14 +70,13 @@ export  const WeeklyMealPlanner = () => {
   useEffect(() => {
     fetchRecipes();
     fetchWeeklyMealPlans(currentWeek.startDate);
-  }, [currentWeek, fetchRecipes, fetchWeeklyMealPlans]);
+    // Reset mealPlanIdRef when week changes
+    mealPlanIdRef.current = Array(7).fill(null);
+  }, [currentWeek, fetchWeeklyMealPlans, fetchRecipes]);
 
-  // Function to handle selecting a recipe for a meal
   const handleSelectRecipe = (recipe: Recipe) => {
     setMealPlans((prevMealPlans) => {
       const updatedMealPlans = [...prevMealPlans];
-      console.log(updatedMealPlans);
-      console.log(currentDay, currentMealType);
       if (
         typeof currentDay === "number" &&
         typeof currentMealType === "string"
@@ -85,60 +85,53 @@ export  const WeeklyMealPlanner = () => {
           currentMealType as keyof (typeof updatedMealPlans)[number]
         ] = recipe;
       }
+      console.log("updated:", updatedMealPlans);
       return updatedMealPlans;
     });
     setCurrentMealType(null);
     setCurrentDay(null);
   };
 
-  // Function to handle clicking the add button for a meal
   const handleAddButtonClick = (day: number, mealType: string) => {
     setCurrentMealType(mealType);
     setCurrentDay(day);
   };
 
-  // Function to handle saving the meal plan to the server
-  const handleSaveMealPlan = async () => {
-    const promises = [];
-    for (let i = 0; i < 7; i++) {
-      const date = new Date(currentWeek.startDate);
-      date.setDate(date.getDate() + i);
-      const formattedDate = date.toISOString().split("T")[0];
-      const mealPlan: DailyMealPlan = {
-        date: formattedDate,
-        breakfastId:
-          typeof mealPlans[i].breakfast === "string"
-            ? (mealPlans[i].breakfast as string)
-            : (mealPlans[i].breakfast as Recipe).id,
-        lunchId:
-          typeof mealPlans[i].lunch === "string"
-            ? (mealPlans[i].lunch as string)
-            : (mealPlans[i].lunch as Recipe).id,
+  const saveMealPlan = async (mealPlan: DailyMealPlan, index: number) => {
+    let method, body, url;
+    const currentMealPlanId = mealPlanIdRef.current[index];
+    console.log(`Saving meal plan for day ${index}, current ID:`, currentMealPlanId);
 
-        dinnerId:
-          typeof mealPlans[i].dinner === "string"
-            ? (mealPlans[i].dinner as string)
-            : (mealPlans[i].dinner as Recipe).id,
+    if (currentMealPlanId !== null) {
+      method = "PUT";
+      body = {
+        breakfastId: mealPlan.breakfastId,
+        lunchId: mealPlan.lunchId,
+        dinnerId: mealPlan.dinnerId,
       };
-      promises.push(saveMealPlan(mealPlan));
+      url = `http://localhost:3000/user/${userId}/mealplans/${currentMealPlanId}`;
+    } else {
+      method = "POST";
+      body = mealPlan;
+      url = `http://localhost:3000/user/${userId}/mealplans`;
     }
-    await Promise.all(promises);
-    alert("Meal plan saved successfully");
-  };
 
-  // Function to save the meal plan to the server
-  const saveMealPlan = async (mealPlan: DailyMealPlan) => {
-    console.log(mealPlan);
     try {
-      const response = await fetch("http://localhost:5000/daily-meal-plans", {
-        method: "POST",
+      const response = await fetch(url, {
+        method: method,
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(mealPlan),
+        body: JSON.stringify(body),
       });
 
-      if (!response.ok) {
+      if (response.ok) {
+        const data = await response.json();
+        if (method === "POST") {
+          mealPlanIdRef.current[index] = data.id;
+          console.log(`Updated mealPlanId for day ${index}:`, data.id);
+        }
+      } else {
         console.error(
           "Failed to save meal plan, status code:",
           response.status
@@ -149,7 +142,25 @@ export  const WeeklyMealPlanner = () => {
     }
   };
 
-  // Function to handle changing the current week
+  const handleSaveMealPlan = async () => {
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(currentWeek.startDate);
+      date.setDate(date.getDate() + i);
+      const mealPlan: DailyMealPlan = {
+        date: date.getTime(),
+        breakfastId: mealPlans[i].breakfast
+          ? (mealPlans[i].breakfast as Recipe).id
+          : null,
+        lunchId: mealPlans[i].lunch ? (mealPlans[i].lunch as Recipe).id : null,
+        dinnerId: mealPlans[i].dinner
+          ? (mealPlans[i].dinner as Recipe).id
+          : null,
+      };
+      await saveMealPlan(mealPlan, i);
+    }
+    alert("Meal plan saved successfully");
+  };
+
   const handleWeekChange = (direction: string) => {
     setCurrentWeek((prevWeek) => {
       const newStartDate = new Date(prevWeek.startDate);
@@ -158,19 +169,18 @@ export  const WeeklyMealPlanner = () => {
       );
       return getWeekFromStartDate(newStartDate);
     });
+    // Reset meal plans when changing weeks
+    setMealPlans(initializeMealPlans());
   };
 
-  // Function to handle changes in the search input
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
   };
 
-  // Filter recipes based on the search query
   const filteredRecipes = recipes.filter((recipe) =>
     recipe.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Function to format the date as a string
   const formatDate = (date: Date) => {
     const dayOfWeek = date.toLocaleDateString("en-US", { weekday: "long" });
     const day = date.getDate().toString().padStart(2, "0");
@@ -179,14 +189,12 @@ export  const WeeklyMealPlanner = () => {
     return `${dayOfWeek} ${day}/${month}/${year}`;
   };
 
-  // Function to format the week range as a string
   const formatWeekRange = (startDate: string) => {
     const start = new Date(startDate);
     const end = new Date(startDate);
     end.setDate(start.getDate() + 6);
     return `Week from ${formatDate(start)} to ${formatDate(end)}`;
   };
-  
 
   return (
     <div className="weekly-meal-planner">
@@ -275,18 +283,11 @@ export  const WeeklyMealPlanner = () => {
                     key={index}
                     onClick={() => handleSelectRecipe(recipe)}
                     className={
-                      recipe.id === currentDay &&
-                      (typeof mealPlans[currentDay].breakfast !== "string"
-                        ? mealPlans[currentDay].breakfast.id
-                        : null) ||
-                          recipe.id === currentDay &&
-                          (typeof mealPlans[currentDay].lunch !== "string"
-                            ? mealPlans[currentDay].lunch.id
-                            : null) ||
-                          recipe.id === currentDay &&
-                          (typeof mealPlans[currentDay].dinner !== "string"
-                            ? mealPlans[currentDay].dinner.id
-                            : null) 
+                      (recipe.id === currentDay &&
+                        mealPlans[currentDay].breakfast) ||
+                      (recipe.id === currentDay &&
+                        mealPlans[currentDay].lunch) ||
+                      (recipe.id === currentDay && mealPlans[currentDay].dinner)
                         ? "selected"
                         : ""
                     }
@@ -299,7 +300,7 @@ export  const WeeklyMealPlanner = () => {
           </div>
         </div>
         <div className="save-button-container">
-          <button className="save-button" onClick={handleSaveMealPlan}>
+          <button onClick={handleSaveMealPlan}>
             Save Meal Plan
           </button>
         </div>
@@ -308,13 +309,25 @@ export  const WeeklyMealPlanner = () => {
   );
 };
 
-// Function to get the current week, starting from Monday
 const getCurrentWeek = () => {
   const now = new Date();
-  const dayOfWeek = now.getDay(); // Sunday - Saturday : 0 - 6
+  const dayOfWeek = now.getDay();
   const numDay = now.getDate();
-  const startDate = new Date(now); // copy
-  startDate.setDate(numDay - dayOfWeek + 1); // set to previous Monday
+  const startDate = new Date(now);
+  startDate.setDate(numDay - dayOfWeek + 1);
+  const days = Array.from({ length: 7 }, (_, i) => {
+    const date = new Date(startDate);
+    date.setDate(startDate.getDate() + i);
+    date.setHours(1);
+    date.setMinutes(0);
+    date.setSeconds(0);
+    date.setMilliseconds(0);
+    return date;
+  });
+  return { startDate: startDate.toISOString().split("T")[0], days };
+};
+
+const getWeekFromStartDate = (startDate: Date) => {
   const days = Array.from({ length: 7 }, (_, i) => {
     const date = new Date(startDate);
     date.setDate(startDate.getDate() + i);
@@ -323,22 +336,10 @@ const getCurrentWeek = () => {
   return { startDate: startDate.toISOString().split("T")[0], days };
 };
 
-// Function to get the week from a start date
-const getWeekFromStartDate = (startDate : Date) => {
-  const days = Array.from({ length: 7 }, (_, i) => {
-    const date = new Date(startDate);
-    date.setDate(startDate.getDate() + i);
-    return date;
-  });
-  return { startDate: startDate.toISOString().split("T")[0], days };
-};
-
-// Function to initialize meal plans for the week
 const initializeMealPlans = () => {
   return Array.from({ length: 7 }, () => ({
-    breakfast: "",
-    lunch: "",
-    dinner: "",
+    breakfast: null,
+    lunch: null,
+    dinner: null,
   }));
 };
-
