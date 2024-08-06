@@ -6,6 +6,7 @@ interface RecipeListProps {
   recipes: Recipe[];
   onViewClick: (id: number) => void;
 }
+
 // Define the RecipeList functional component, which takes recipes and onViewClick as props
 const RecipeList: React.FC<RecipeListProps> = ({ recipes, onViewClick }) => {
   return (

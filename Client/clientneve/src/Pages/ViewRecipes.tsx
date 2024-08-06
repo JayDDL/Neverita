@@ -1,45 +1,38 @@
-// Import necessary hooks from 'react' and 'react-router-dom'
 import React from "react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import RecipeList from '../Components/RecipeList';
 import "./ViewRecipes.css";
 import { Recipe } from "../Types/type";
 
 // Define the ViewRecipes functional component
 const ViewRecipes = () => {
-  const [recipes, setRecipes] = useState<Recipe[]>([]); // State for storing the list of recipes
-  const navigate = useNavigate(); // Hook to programmatically navigate between routes
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const navigate = useNavigate();
 
-  // useEffect hook to fetch recipes when the component mounts
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
         const response = await fetch("http://localhost:5000/recipes");
         if (response.ok) {
           const data = await response.json();
-          setRecipes(data); // Set the fetched recipes data to the state
+          setRecipes(data);
         } else {
           console.error(
             "Failed to fetch recipes, status code:",
             response.status
-          ); // Log error if request failed
+          );
         }
       } catch (error) {
-        console.error("Error fetching recipes:", error); // Log any error that occurs during the request
+        console.error("Error fetching recipes:", error);
       }
     };
 
-    fetchRecipes(); // Call the function to fetch the recipes
-  }, []); // Empty dependency array to run the effect only once
+    fetchRecipes();
+  }, []);
 
-  // Function to handle clicking the view button for a recipe
-
-  // Return the JSX for rendering the ViewRecipes component
   return (
     <div className="container">
       <h1>Recipes</h1>
-      {/* <RecipeList recipes={recipes} onViewClick={handleViewClick} /> Render the RecipeList component */}
     </div>
   );
 };

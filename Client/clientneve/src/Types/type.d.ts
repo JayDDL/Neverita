@@ -6,7 +6,7 @@ export interface Meal {
 export type MealType = "breakfast" | "lunch" | "dinner";
 
 export interface Recipe {
-  id: string;
+  id: number;
   name: string;
   description: string;
   ingredients: Ingredients[];
