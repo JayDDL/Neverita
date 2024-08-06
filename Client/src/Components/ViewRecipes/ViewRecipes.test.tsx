@@ -13,7 +13,7 @@ describe("ViewRecipes Component", () => {
   it("renders the component title", () => {
     render(
       <MemoryRouter>
-        <ViewRecipes />
+        <ViewRecipes userId={0} />
       </MemoryRouter>
     );
     expect(screen.getByText("Recipes")).toBeInTheDocument();
@@ -29,7 +29,7 @@ describe("ViewRecipes Component", () => {
 
     render(
       <MemoryRouter>
-        <ViewRecipes />
+        <ViewRecipes userId={0}/>
       </MemoryRouter>
     );
 

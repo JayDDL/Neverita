@@ -1,28 +1,41 @@
 export type Ingredient = {
-  name: string;
-  weight: string;
+  Ingredients: innerIngredient
+  quantity: string;
   preparationType: string;
   cookingMethod: string;
+}
+
+export type normalIngredient = {
+  name: string;
+  quantity: string;
+  preparationType: string;
+  cookingMethod: string;
+}
+
+export type innerIngredient = {
+  id: number;
+  name: string;
+  userId: 1
 }
 
 export type Recipe = {
   id:number;
   name: string;
   description: string;
-  ingredients: Ingredient[];
+  recipeIngredient: Ingredient[];
 }
 
 export type SelectedMeals = {
-  breakfast: Recipe | string;
-  lunch:  Recipe | string;
-  dinner: Recipe | string;
+  breakfast: Recipe | null;
+  lunch:  Recipe |  null;
+  dinner: Recipe |  null;
 }
 
 export type DailyMealPlan = {
-  date:string;
-  breakfastId:number | string;
-  lunchId: number | string;
-  dinnerId: number | string;
+  date?:number;
+  breakfastId?:number | null;
+  lunchId?: number | null;
+  dinnerId?: number | null;
 }
 
 export type RecipeProps = {

@@ -4,19 +4,19 @@ import "./RecipeDetails.css";
 
 import { Ingredient, Recipe } from "../../types";
 
-export const RecipeDetails = () => {
-  const { id } = useParams();
+export const RecipeDetails = ({userId} : {userId: number}) => {
+  const { recipeId } = useParams();
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [diet, setDiet] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
+  console.log(recipeId)
 
   useEffect(() => {
     const fetchRecipeAndDiet = async () => {
       setIsLoading(true);
       try {
-        // Fetch recipe
         const recipeResponse = await fetch(
-          `http://localhost:5000/recipes/${id}`
+          `http://localhost:3000/user/${userId}/recipes/${recipeId}`
         );
         if (!recipeResponse.ok) {
           throw new Error(
@@ -24,11 +24,12 @@ export const RecipeDetails = () => {
           );
         }
         const recipeData = await recipeResponse.json();
+        console.log(recipeData)
         setRecipe(recipeData);
 
         // Fetch diet
-        const ingredientNames = recipeData.ingredients.map(
-          (ingredient: Ingredient) => ingredient.name
+        const ingredientNames = recipeData.recipeIngredient.map(
+          (ingredient: Ingredient) => ingredient.Ingredients.name
         );
         const dietResponse = await fetch("http://localhost:5001/diet", {
           method: "POST",
@@ -48,7 +49,7 @@ export const RecipeDetails = () => {
       setIsLoading(false);
     };
     fetchRecipeAndDiet();
-  }, [id]);
+  }, [recipeId,userId]);
 
   if (isLoading) {
     return <div>Loading recipe and diet information...</div>;
@@ -75,10 +76,10 @@ export const RecipeDetails = () => {
           </tr>
         </thead>
         <tbody>
-          {recipe.ingredients.map((ingredient, index: number) => (
+          {recipe.recipeIngredient.map((ingredient, index: number) => (
             <tr key={index}>
-              <td>{ingredient.name}</td>
-              <td>{ingredient.weight}</td>
+              <td>{ingredient.Ingredients.name}</td>
+              <td>{ingredient.quantity}</td>
               <td>{ingredient.preparationType}</td>
               <td>{ingredient.cookingMethod}</td>
             </tr>

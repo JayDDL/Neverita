@@ -2,10 +2,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./CreateRecipe.module.css";
-import { Ingredient } from "../../types";
+import { normalIngredient } from "../../types";
 
 // Define the CreateRecipe functional component
-export const CreateRecipe = () => {
+export const CreateRecipe = ({userId} : {userId: number}) => {
   // Define state variables for the form fields and ingredients list
   const [name, setName] = useState<string>(""); // State for recipe name
   const [description, setDescription] = useState<string>(""); // State for recipe description
@@ -13,7 +13,7 @@ export const CreateRecipe = () => {
   const [quantity, setQuantity] = useState<string>(""); // State for ingredient quantity
   const [preparationMethod, setPreparationMethod] = useState<string>(""); // State for preparation method
   const [cookingMethod, setCookingMethod] = useState<string>(""); // State for cooking method
-  const [ingredients, setIngredients] = useState<Ingredient[]>([]); // State for list of ingredients
+  const [ingredients, setIngredients] = useState<normalIngredient[]>([]); // State for list of ingredients
   const navigate = useNavigate(); // Hook to programmatically navigate between routes
 
   // Function to handle adding an ingredient to the list
@@ -21,7 +21,7 @@ export const CreateRecipe = () => {
     // Create a new ingredient object
     const newIngredient = {
       name: ingredientName,
-      weight: quantity,
+      quantity: quantity,
       preparationType: preparationMethod,
       cookingMethod: cookingMethod,
     };
@@ -40,15 +40,22 @@ export const CreateRecipe = () => {
   const handleAddRecipe = async () => {
     // Create a new recipe object
     const newRecipe = {
+      recipe: {
       name,
       description,
-      ingredients,
-    };
+      
+    },
+    ingredients: ingredients
+  }
+
+    console.log(newRecipe)
+    console.log(userId)
 
     if (name && description && ingredients) {
       try {
+
         // Send a POST request to the server to add the new recipe
-        const response = await fetch("http://localhost:5000/recipes", {
+        const response = await fetch(`http://localhost:3000/user/${userId}/recipes`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -145,7 +152,7 @@ export const CreateRecipe = () => {
           {/* Map over the ingredients array to display each ingredient */}
           {ingredients.map((ingredient, index) => (
             <li key={index}>
-              {ingredient.name} - {ingredient.weight} -{" "}
+              {ingredient.name} - {ingredient.quantity} -{" "}
               {ingredient.preparationType} - {ingredient.cookingMethod}
             </li>
           ))}
