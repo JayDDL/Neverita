@@ -5,13 +5,16 @@ import {
 	updateMealPlanController,
 	deleteMealPlanController,
 	getMealPlanByDateController,
-} from "../Controllers/mealPlanController";
+	getWeeklyMealPlanController,
+} from "../controllers/mealPlanController";
 
 export const mealPlanRouter = express.Router({ mergeParams: true });
 
 mealPlanRouter.get("/", getAllMealPlansController);
 
 mealPlanRouter.get("/:date", getMealPlanByDateController);
+
+mealPlanRouter.get("/weekly/:date", getWeeklyMealPlanController);
 
 mealPlanRouter.post("/", createMealPlanController);
 

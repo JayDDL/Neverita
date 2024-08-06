@@ -2,7 +2,7 @@ import * as express from "express";
 import {
 	getUserController,
 	createUserController,
-} from "../Controllers/userController";
+} from "../controllers/userController";
 
 export const userRouter = express.Router(); // Create a new router object for users
 
