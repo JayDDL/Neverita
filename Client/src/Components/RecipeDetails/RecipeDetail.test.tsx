@@ -12,9 +12,9 @@ describe("Recipe Details Component", () => {
 
   it("shows loading state when not loaded", () => {
     render(
-      <MemoryRouter initialEntries={["/recipe-details/1"]}>
+      <MemoryRouter initialEntries={["/recipe/1"]}>
         <Routes>
-          <Route path="/recipe-details/:id" element={<RecipeDetails />} />
+          <Route path="/recipe/:id" element={<RecipeDetails userId={1} />} />
         </Routes>
       </MemoryRouter>
     );
@@ -28,18 +28,22 @@ describe("Recipe Details Component", () => {
       Promise.resolve({
         ok: true,
         json: async () =>
-          url.toString().includes("recipe") ? mockRecipe : mockDiet,
+          url.toString().includes("recipes") ? mockRecipe : mockDiet,
       } as Response)
     );
+
+
+
 
     render(
       <MemoryRouter initialEntries={["/recipe/1"]}>
         <Routes>
-          <Route path="/recipe/:id" element={<RecipeDetails />} />
+          <Route path="/recipe/:id" element={<RecipeDetails  userId={1}/>} />
         </Routes>
       </MemoryRouter>
     );
 
+    console.log(mockRecipe)
     await waitFor(() => {
       expect(screen.getByText(mockRecipe.name)).toBeInTheDocument();
       expect(screen.getByText(mockRecipe.description)).toBeInTheDocument();
@@ -55,12 +59,13 @@ describe("Recipe Details Component", () => {
           url.toString().includes("recipes") ? mockRecipe : mockDiet,
       } as Response)
     );
+    
 
     render(
-      <MemoryRouter initialEntries={["/recipe-details/1"]}>
+      <MemoryRouter initialEntries={["/recipe/1"]}>
         <Routes>
-          <Route path="/recipe-details/:id" element={<RecipeDetails />} />
-        </Routes>
+          <Route path="/recipe/:id" element={<RecipeDetails  userId={1}/>} />
+        </Routes> 
       </MemoryRouter>
     );
 
