@@ -8,7 +8,6 @@ import {
 	updateMealPlanModel,
 } from "../models/mealPlanModels";
 
-// Function to get all meal plans
 export const getAllMealPlansController = async (
 	req: Request,
 	res: Response,
@@ -17,7 +16,7 @@ export const getAllMealPlansController = async (
 		const { userId } = req.params;
 		const userIdNum = Number(userId);
 		const mealPlans = await getAllMealPlansModel(userIdNum);
-		res.status(200).json(mealPlans); // Returns all meal plans
+		res.status(200).json(mealPlans);
 	} catch (error) {
 		const typedError = error as Error;
 		res.status(500).json({ error: typedError.message });
@@ -31,7 +30,7 @@ export const getMealPlanByDateController = async (
 	try {
 		const { userId, date } = req.params;
 		const userIdNum = Number(userId);
-		const dateNum = new Date(date);
+		const dateNum = new Date(Number(date));
 
 		const mealPlan = await getMealPlanByDateModel(userIdNum, dateNum);
 		res.status(200).json(mealPlan);
@@ -41,7 +40,6 @@ export const getMealPlanByDateController = async (
 	}
 };
 
-// Function to create a new meal plan
 export const createMealPlanController = async (
 	req: Request,
 	res: Response,
