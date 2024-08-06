@@ -5,8 +5,10 @@ import {
 	deleteMealPlanModel,
 	getAllMealPlansModel,
 	getMealPlanByDateModel,
+	getWeeklyMealPlanModel,
 	updateMealPlanModel,
 } from "../models/mealPlanModels";
+import { getEndDate } from "../utils";
 
 export const getAllMealPlansController = async (
 	req: Request,
@@ -34,6 +36,27 @@ export const getMealPlanByDateController = async (
 
 		const mealPlan = await getMealPlanByDateModel(userIdNum, dateNum);
 		res.status(200).json(mealPlan);
+	} catch (error) {
+		const typedError = error as Error;
+		res.status(500).json({ error: typedError.message });
+	}
+};
+
+export const getWeeklyMealPlanController = async (
+	req: Request,
+	res: Response,
+): Promise<void> => {
+	try {
+		const { userId, date } = req.params;
+		const userIdNum = Number(userId);
+		const startDate = new Date(Number(date));
+		const endDate = getEndDate(startDate);
+		const weeklyMealPlan = await getWeeklyMealPlanModel(
+			userIdNum,
+			startDate,
+			endDate,
+		);
+		res.status(200).send(weeklyMealPlan);
 	} catch (error) {
 		const typedError = error as Error;
 		res.status(500).json({ error: typedError.message });

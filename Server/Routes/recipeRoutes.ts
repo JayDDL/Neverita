@@ -4,7 +4,7 @@ import {
 	getAllRecipesController,
 	deleteRecipeByIdController,
 	getRecipeByIdController,
-} from "../Controllers/recipeController";
+} from "../controllers/recipeController";
 
 export const recipeRouter = express.Router({ mergeParams: true });
 
