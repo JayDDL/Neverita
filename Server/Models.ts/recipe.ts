@@ -2,10 +2,10 @@ import { Table, Column, Model, BelongsTo, ForeignKey, DataType } from 'sequelize
 import { User } from './User';
 
 @Table({
-    tableName: 'Users',
+    tableName: 'recipes',
     timestamps: false
   })
-export class Recipe extends Model<Recipe> {
+export class Recipe extends Model{
   @Column({
     type: DataType.STRING,
     allowNull: false,
@@ -13,10 +13,10 @@ export class Recipe extends Model<Recipe> {
   title!: string;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.JSONB,
     allowNull: false,
   })
-  ingredients!: string;
+  ingredients!: object[];
 
   @Column({
     type: DataType.STRING,
@@ -24,13 +24,19 @@ export class Recipe extends Model<Recipe> {
   })
   instructions!: string;
 
-  @ForeignKey(() => User)
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
-  userId!: number;
+//   @ForeignKey(() => User)
+//   @Column({
+//     type: DataType.INTEGER,
+//     allowNull: true,
+//   })
+//   userId!: number;
 
-  @BelongsTo(() => User)
-  user!: User;
+//   @BelongsTo(() => User)
+//   user!: User;
 }
+export interface RecipeCreationAttributes {
+    title: string;
+    ingredients: string;
+    instructions: string;
+    userId?: number | null;
+  }

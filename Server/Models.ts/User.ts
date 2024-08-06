@@ -31,6 +31,6 @@ export class User extends Model<User> {
   })
   password!: string;
 
-  @HasMany(() => Recipe)
-  recipes!: Recipe[];
+//   @HasMany(() => Recipe)
+//   recipes!: Recipe[];
 }

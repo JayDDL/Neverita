@@ -6,9 +6,12 @@ import { DailyMealPlan } from './dailyMealPlanner';
 import { WeeklyMealPlan } from './weeklyMealPlanner';
 
 const sequelize = new Sequelize({
-  dialect: 'sqlite',
-  storage: './database.sqlite',
+  dialect: 'postgres',
   models: [User, Recipe, MealPlan, DailyMealPlan, WeeklyMealPlan],
+  username: "stepheno",
+  password: "password",
+  database: "mealplans",
+  host: "127.0.0.1",
 });
 
 export { sequelize, User, Recipe, MealPlan, DailyMealPlan, WeeklyMealPlan };

@@ -1,18 +1,17 @@
 {
   "compilerOptions": {
-    "target": "ES2020",                          // Specify ECMAScript target version
-    "module": "commonjs",                        // Specify module code generation
-    "rootDir": "./src",                          // Specify the root directory of input files
-    "outDir": "./dist",                          // Redirect output structure to the directory
-    "strict": true,                              // Enable all strict type-checking options
-    "esModuleInterop": true,                     // Enables emit interoperability with ES modules
-    "skipLibCheck": true,                        // Skip type checking of all declaration files
-    "noImplicitAny": true,
-    "forceConsistentCasingInFileNames": true,    // Disallow inconsistently-cased references to the same file
-    "resolveJsonModule": true,                   // Include modules imported with .json extension
-    "moduleResolution": "node",                  // TypeScript should use Node's module resolution algorithm
-    "types": ["node", "express", "pg", "body-parser", "cors" ]           // Include type definitions for Node.js, Express, and pg
+    "target": "ES6",                  // Target ECMAScript version
+    "module": "commonjs",             // Module system
+    "outDir": "./dist",               // Directory for compiled files
+    "rootDir": "./server",            // Directory where your server source files are located
+    "strict": true,                   // Enable strict type-checking options
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true           // Enables emit interoperability between CommonJS and ES Modules
   },
-  "include": ["src/**/*.ts"],                    // Include all TypeScript files in the src directory
-  "exclude": ["node_modules", "dist"]            // Exclude node_modules and dist directories
+  "include": ["server/**/*"],         // Include all files in the server directory
+  "exclude": ["node_modules"]         // Exclude node_modules directory
 }
+
