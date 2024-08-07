@@ -52,9 +52,9 @@ const DailyMealPlanner: React.FC = () => {
         const data = await response.json();
         if (data) {
           setSelectedMeals({
-            breakfast: data.breakfast || "",
-            lunch: data.lunch || "",
-            dinner: data.dinner || "",
+            breakfast: data.breakfast || { id: "", name: "" },
+            lunch: data.lunch || { id: "", name: "" },
+            dinner: data.dinner || { id: "", name: "" },
           });
         } else {
           setSelectedMeals({
@@ -85,11 +85,13 @@ const DailyMealPlanner: React.FC = () => {
   };
 
   const handleSelectRecipe = (recipe: Recipe) => {
-    setSelectedMeals((prevSelectedMeals) => ({
-      ...prevSelectedMeals,
-      currentMealType: recipe,
-    }));
-    setCurrentMealType(null);
+    if (currentMealType) {
+      setSelectedMeals((prevSelectedMeals) => ({
+        ...prevSelectedMeals,
+        [currentMealType]: { id: recipe.id.toString(), name: recipe.name },
+      }));
+      setCurrentMealType(null);
+    }
   };
 
   const handleAddButtonClick = (mealType: MealType) => {
