@@ -1,11 +1,10 @@
 // Import necessary hooks and components from 'react' and 'react-router-dom'
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from "./CreateRecipe.module.css";
 import { normalIngredient } from "../../types";
 
 // Define the CreateRecipe functional component
-export const CreateRecipe = ({userId} : {userId: number}) => {
+export const CreateRecipe = ({ userId }: { userId: number }) => {
   // Define state variables for the form fields and ingredients list
   const [name, setName] = useState<string>(""); // State for recipe name
   const [description, setDescription] = useState<string>(""); // State for recipe description
@@ -26,13 +25,11 @@ export const CreateRecipe = ({userId} : {userId: number}) => {
       cookingMethod: cookingMethod,
     };
     if (ingredientName) {
-    // Update the ingredients list with the new ingredient
-    setIngredients([...ingredients, newIngredient]);
-    // Reset the ingredient form fields
-    setIngredientName("");
-    setQuantity("");
-    setPreparationMethod("");
-    setCookingMethod("");
+      setIngredients([...ingredients, newIngredient]);
+      setIngredientName("");
+      setQuantity("");
+      setPreparationMethod("");
+      setCookingMethod("");
     }
   };
 
@@ -41,27 +38,25 @@ export const CreateRecipe = ({userId} : {userId: number}) => {
     // Create a new recipe object
     const newRecipe = {
       recipe: {
-      name,
-      description,
-      
-    },
-    ingredients: ingredients
-  }
-
-    console.log(newRecipe)
-    console.log(userId)
+        name,
+        description,
+      },
+      ingredients: ingredients,
+    };
 
     if (name && description && ingredients) {
       try {
-
         // Send a POST request to the server to add the new recipe
-        const response = await fetch(`http://localhost:3000/user/${userId}/recipes`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
+        const response = await fetch(
+          `http://localhost:3000/user/${userId}/recipes`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newRecipe), // Send the new recipe data as JSON
           },
-          body: JSON.stringify(newRecipe), // Send the new recipe data as JSON
-        });
+        );
 
         // Check if the request was successful
         if (response.ok) {
@@ -79,89 +74,126 @@ export const CreateRecipe = ({userId} : {userId: number}) => {
   // Return the JSX for rendering the CreateRecipe component
   return (
     <div className="container">
-      <h1>Create Recipe</h1>
-      <div className={styles.formGroup}>
-        <label className={styles.label}>
-          Recipe Name:
+      <h1 className="py-5 text-center text-4xl font-extrabold underline dark:text-white">
+        Create Recipe
+      </h1>
+      <div className=" w-full appearance-none rounded px-3 py-2 leading-tight text-gray-700 focus:outline-none">
+        <div className="mb-4">
+          <label htmlFor="recipeName" className="mb-2 block text-sm font-bold text-gray-700">
+            Recipe Name:
+          </label>
           <input
-            className={styles.input}
+            className=" w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 focus:outline-none"
             type="text"
             value={name}
-            onChange={(e) => setName(e.target.value)} // Update name state on input change
+            id = "recipeName"
+            name = "recipeName"
+            onChange={(e) => setName(e.target.value)}
           />
-        </label>
-      </div>
-      <div className={styles.formGroup}>
-        <label className={styles.label}>
-          Recipe Description:
+        </div>
+        <div className="mb-4">
+          <label htmlFor="recipeDescription" className="mb-2 block text-sm font-bold text-gray-700">
+            Recipe Description:
+          </label>
           <textarea
-            className={styles.textarea}
+            className=" w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 focus:outline-none"
             value={description}
-            onChange={(e) => setDescription(e.target.value)} // Update description state on textarea change
+            id = "recipeDescription"
+            name = "recipeDescription"
+            onChange={(e) => setDescription(e.target.value)}
           />
-        </label>
-      </div>
-      <div className={styles.ingredientSection}>
-        <h2>Add Ingredients</h2>
-        <div className={styles.ingredientForm}>
-          <label className={styles.label}>
-            Ingredient Name:
+        </div>
+        <div className="mb-4">
+          <h2 className="mb-2 text-xl font-bold underline">Add Ingredients</h2>
+          <div className="mb-2">
+            <label htmlFor="ingredientName" className="mb-2 block text-sm font-bold text-gray-700">
+              Ingredient Name:
+            </label>
             <input
-              className={styles.input}
+              className=" w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 focus:outline-none"
               type="text"
               value={ingredientName}
-              onChange={(e) => setIngredientName(e.target.value)} // Update ingredientName state on input change
+              id="ingredientName"
+              name="ingredientName"
+              onChange={(e) => setIngredientName(e.target.value)}
             />
-          </label>
-          <label className={styles.label}>
-            Quantity:
+          </div>
+          <div className="mb-2">
+            <label htmlFor="quantity" className="mb-2 block text-sm font-bold text-gray-700">
+              Quantity:
+            </label>
             <input
-              className={styles.input}
+              className="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 focus:outline-none"
               type="text"
               value={quantity}
-              onChange={(e) => setQuantity(e.target.value)} // Update quantity state on input change
+              name="quantity"
+              id = "quantity"
+              onChange={(e) => setQuantity(e.target.value)}
             />
-          </label>
-          <label className={styles.label}>
-            Preparation Method:
+          </div>
+          <div className="mb-2">
+            <label htmlFor="preparationMethod" className="mb-2 block text-sm font-bold text-gray-700">
+              Preparation Method:
+            </label>
             <input
-              className={styles.input}
+              className="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 focus:outline-none"
               type="text"
               value={preparationMethod}
-              onChange={(e) => setPreparationMethod(e.target.value)} // Update preparationMethod state on input change
+              id= "preparationMethod"
+              name = "preparationMethod"
+              onChange={(e) => setPreparationMethod(e.target.value)}
             />
-          </label>
-          <label className={styles.label}>
-            Cooking Method:
+          </div>
+          <div className="mb-2">
+            <label htmlFor="cookingMethod" className="mb-2 block text-sm font-bold text-gray-700">
+              Cooking Method:
+            </label>
             <input
-              className={styles.input}
+              className=" w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 focus:outline-none"
               type="text"
               value={cookingMethod}
-              onChange={(e) => setCookingMethod(e.target.value)} // Update cookingMethod state on input change
+              name = "cookingMethod"
+              id = "cookingMethod"
+              onChange={(e) => setCookingMethod(e.target.value)}
             />
-          </label>
-          <button className={styles.button} onClick={handleAddIngredient}>
-            Add Ingredient
-          </button>{" "}
-          {/* Call handleAddIngredient on button click */}
+          </div>
+          <div className="flex flex-wrap justify-center pt-5">
+            <button
+              className=" rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700 focus:outline-none"
+              onClick={handleAddIngredient}
+            >
+              Add Ingredient
+            </button>
+          </div>
         </div>
+        <div className="mb-4">
+          {ingredients.length ? (
+            <h2 className="mb-2 text-xl font-bold underline">
+              Ingredient List
+            </h2>
+          ) : (
+            <></>
+          )}
+          <ul>
+            {ingredients.map((ingredient, index) => (
+              <li key={index} className="mb-2">
+                {ingredient.name} - {ingredient.quantity} -{" "}
+                {ingredient.preparationType} - {ingredient.cookingMethod}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <hr className="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700"></hr>
+        <div className="flex flex-wrap justify-center">
+        <button
+          className="rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700 focus:outline-none"
+          onClick={handleAddRecipe}
+        >
+          Add Recipe
+        </button>
       </div>
-      <div className={styles.ingredientList}>
-        <h2>Ingredients List</h2>
-        <ul>
-          {/* Map over the ingredients array to display each ingredient */}
-          {ingredients.map((ingredient, index) => (
-            <li key={index}>
-              {ingredient.name} - {ingredient.quantity} -{" "}
-              {ingredient.preparationType} - {ingredient.cookingMethod}
-            </li>
-          ))}
-        </ul>
       </div>
-      <button className={styles.button} onClick={handleAddRecipe}>
-        Add Recipe
-      </button>{" "}
-      {/* Call handleAddRecipe on button click */}
+      
     </div>
   );
 };
