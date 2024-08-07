@@ -1,32 +1,95 @@
 import type { Request, Response } from "express";
+import {
+	comparePassword,
+	generateAccessToken,
+	generateRefreshToken,
+	hashPassword,
+} from "../utils";
+import {
+	getUserModel,
+	registerUserModel,
+	userLoginModel,
+} from "../models/userModels";
+import type { AuthRequest } from "../types";
+
 // Define a mock user for testing purposes
 const mockUser = { id: 1, name: "TestUser1", email: "testuser1@example.com" };
 
-// Function to get the mock user
 export const getUserController = async (
-	req: Request,
+	req: AuthRequest,
 	res: Response,
 ): Promise<void> => {
 	try {
-		// Send the mock user as a JSON response with a status code of 200
-		res.status(200).json(mockUser); // Returns the mock user
+		const userId = req.user;
+		const user = await getUserModel(userId);
+		const userProfileData = {
+			name: user?.name,
+			email: user?.email,
+		};
+		res.json(userProfileData);
 	} catch (error) {
 		const typedError = error as Error;
-		// Send an error message as a JSON response with a status code of 500 if an error occurs
 		res.status(500).json({ error: typedError.message });
 	}
 };
 
-// Function to create the mock user
-export const createUserController = async (
-	req: Request,
-	res: Response,
-): Promise<void> => {
-	try {
-		// Assuming the mock user is created
-		res.status(201).json(mockUser); // Returns the mock user
-	} catch (error) {
-		const typedError = error as Error;
-		res.status(500).json({ error: typedError.message });
-	}
+export const userLoginController = async (req: Request, res: Response) => {
+	const { email, password } = req.body;
+
+	const userData = await userLoginModel(email);
+	if (!userData) return res.sendStatus(403);
+
+	const isCorrectPassword = await comparePassword(
+		password,
+		userData.hashedPassword,
+	);
+	if (!isCorrectPassword) return res.sendStatus(403);
+
+	const userId = {
+		id: userData.id,
+	};
+
+	const accessToken = generateAccessToken(userId);
+	const refreshToken = generateRefreshToken(userId);
+
+	res
+		.cookie("access_token", accessToken, {
+			httpOnly: true,
+			secure: true,
+			sameSite: "strict",
+			maxAge: 15 * 1000,
+		})
+		.cookie("refresh_token", refreshToken, {
+			httpOnly: true,
+			secure: true,
+			sameSite: "strict",
+			maxAge: 60 * 1000,
+		})
+		.header("Access-Control-Allow-Credentials", "true")
+		.json({ status: "success" });
+};
+
+export const userRegisterController = async (req: Request, res: Response) => {
+	const { name, email, password } = req.body;
+	const hashedPassword = await hashPassword(password);
+	const newUser = await registerUserModel(name, email, hashedPassword);
+
+	const accessToken = generateAccessToken(newUser);
+	const refreshToken = generateRefreshToken(newUser);
+
+	res
+		.cookie("access_token", accessToken, {
+			httpOnly: true,
+			secure: true,
+			sameSite: "strict",
+			maxAge: 15 * 1000,
+		})
+		.cookie("refresh_token", refreshToken, {
+			httpOnly: true,
+			secure: true,
+			sameSite: "strict",
+			maxAge: 60 * 1000,
+		})
+		.header("Access-Control-Allow-Credentials", "true")
+		.json({ status: "success" });
 };
