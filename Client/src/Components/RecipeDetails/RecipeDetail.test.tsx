@@ -19,7 +19,7 @@ describe("Recipe Details Component", () => {
       </MemoryRouter>
     );
     expect(
-      screen.getByText("Loading recipe and diet information...")
+      screen.getByRole("status")
     ).toBeInTheDocument();
   });
 
@@ -70,10 +70,10 @@ describe("Recipe Details Component", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText("Ingredient Name")).toBeInTheDocument();
+      expect(screen.getByText("Ingredient")).toBeInTheDocument();
       expect(screen.getByText("Quantity")).toBeInTheDocument();
-      expect(screen.getByText("Preparation Method")).toBeInTheDocument();
-      expect(screen.getByText("Cooking Method")).toBeInTheDocument();
+      expect(screen.getByText("Preparation")).toBeInTheDocument();
+      expect(screen.getByText("Cooking")).toBeInTheDocument();
       expect(screen.getByText("Ingredient 1")).toBeInTheDocument();
       expect(screen.getByText("100g")).toBeInTheDocument();
       expect(screen.getByText("Chopped")).toBeInTheDocument();

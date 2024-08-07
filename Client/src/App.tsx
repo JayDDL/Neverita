@@ -1,45 +1,53 @@
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { ViewRecipes } from "./Components/ViewRecipes/ViewRecipes";
 import { RecipeDetails } from "./Components/RecipeDetails/RecipeDetails";
 import { CreateRecipe } from "./Components/CreateRecipe/CreateRecipe";
 import { DailyMealPlanner } from "./Components/DailyMealPlanner/DailyMealPlanner";
-import { WeeklyMealPlanner } from "./Components/WeeklyMealPlanner/WeeklyMealPlanner";
-import "./App.css";
 import { useState } from "react";
+import { Login } from "./Components/Login/Login";
+import { Navbar } from "./Components/NavBar/NavBar";
 
 const App = () => {
+  const [userId, setUserId] = useState<null | number>(null);  
 
-  const [userId, setUserId] = useState(1)
-
-  return (
+  const loggedIn = (
+    userId &&
     <Router>
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/view-recipes">View Recipes</Link>
-            </li>
-            <li>
-              <Link to="/create-recipe">Create Recipe</Link>
-            </li>
-            <li>
-              <Link to="/daily-meal-planner">Daily Meal Planner</Link>
-            </li>
-            <li>
-              <Link to="/weekly-meal-planner">Weekly Meal Planner</Link>
-            </li>
-          </ul>
-        </nav>
+      <div className="flex flex-wrap-reverse justify-center h-screen ">
+        <footer className="h-16">
+    <Navbar/>
+    </footer>
+    <div className="w-full p-3">
         <Routes>
-          <Route path="/view-recipes" element={<ViewRecipes userId = {userId} />} />
-          <Route path="/recipe/:recipeId" element={<RecipeDetails userId={userId}/>} />
-          <Route path="/create-recipe" element={<CreateRecipe userId = {userId} />} />
-          <Route path="/daily-meal-planner" element={<DailyMealPlanner userId = {userId}/>} />
-          <Route path="/weekly-meal-planner" element={<WeeklyMealPlanner userId = {userId} />} />
+          <Route
+            path="/view-recipes"
+            element={<ViewRecipes userId={userId} />}
+          />
+          <Route
+            path="/recipe/:recipeId"
+            element={<RecipeDetails userId={userId} />}
+          />
+          <Route
+            path="/create-recipe"
+            element={<CreateRecipe userId={userId} />}
+          />
+          <Route
+            path="/daily-meal-planner"
+            element={<DailyMealPlanner userId={userId} />}
+          />
         </Routes>
-      </div>
+        </div>
+        </div>
     </Router>
   );
+
+  const loggedOut = (<>
+  <Router>
+  <Login setUserId = {setUserId}/> 
+  </Router>
+  </>);
+
+  return <>{userId ? loggedIn : loggedOut}</>;
 };
 
 export default App;

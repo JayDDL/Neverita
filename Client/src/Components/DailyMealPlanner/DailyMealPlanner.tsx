@@ -1,5 +1,4 @@
 import { useEffect, useState, ChangeEvent } from "react";
-import "./DailyMealPlanner.css";
 import { DailyMealPlan, Recipe, SelectedMeals } from "../../types";
 
 export const DailyMealPlanner = ({ userId }: { userId: number }) => {
@@ -45,7 +44,7 @@ export const DailyMealPlanner = ({ userId }: { userId: number }) => {
   const fetchRecipes = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/user/${userId}/recipes`
+        `http://localhost:3000/user/${userId}/recipes`,
       );
       if (response.ok) {
         const data = await response.json();
@@ -62,7 +61,7 @@ export const DailyMealPlanner = ({ userId }: { userId: number }) => {
   const fetchMealPlan = async (date: Date) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/user/${userId}/mealplans/${date.getTime()}`
+        `http://localhost:3000/user/${userId}/mealplans/${date.getTime()}`,
       );
       if (response.ok) {
         const data = await response.json();
@@ -74,14 +73,14 @@ export const DailyMealPlanner = ({ userId }: { userId: number }) => {
           });
           setMealPlanId(data.id);
         } else {
-        setMealPlanId(null)
-        setSelectedMeals({
-          breakfast: null,
-          lunch: null,
-          dinner: null,
-        });
+          setMealPlanId(null);
+          setSelectedMeals({
+            breakfast: null,
+            lunch: null,
+            dinner: null,
+          });
+        }
       }
-    }
     } catch (error) {
       console.error("Error fetching meal plan:", error);
       setSelectedMeals({
@@ -122,18 +121,18 @@ export const DailyMealPlanner = ({ userId }: { userId: number }) => {
       dinnerId: selectedMeals.dinner ? selectedMeals.dinner.id : null,
     };
     try {
-      let method,body;
-      if(mealPlanId){
-        method = "PUT"
+      let method, body;
+      if (mealPlanId) {
+        method = "PUT";
         body = {
           breakfastId: mealPlan.breakfastId,
-          lunchId : mealPlan.lunchId,
+          lunchId: mealPlan.lunchId,
           dinnerId: mealPlan.dinnerId,
-        }
+        };
       } else {
-        method= 'POST'
-        body = mealPlan
-      } 
+        method = "POST";
+        body = mealPlan;
+      }
       const url = mealPlanId
         ? `http://localhost:3000/user/${userId}/mealplans/${mealPlanId}`
         : `http://localhost:3000/user/${userId}/mealplans`;
@@ -150,7 +149,7 @@ export const DailyMealPlanner = ({ userId }: { userId: number }) => {
       } else {
         console.error(
           "Failed to save meal plan, status code:",
-          response.status
+          response.status,
         );
       }
     } catch (error) {
@@ -174,7 +173,7 @@ export const DailyMealPlanner = ({ userId }: { userId: number }) => {
 
   // Filter recipes based on the search query
   const filteredRecipes = recipes.filter((recipe) =>
-    recipe.name.toLowerCase().includes(searchQuery.toLowerCase())
+    recipe.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   // Function to format the date as a string
@@ -187,18 +186,31 @@ export const DailyMealPlanner = ({ userId }: { userId: number }) => {
   };
 
   return (
-    <div className="daily-meal-planner">
-      <div className="daily-meal-planner-content">
-        <div className="meal-planner-content">
-          <div className="day-navigation">
-            <button onClick={() => handleDayChange("prev")}>{"<"}</button>
-            <h2>{formatDate(currentDate)}</h2>
-            <button onClick={() => handleDayChange("next")}>{">"}</button>
+    <div className="p-4">
+      <div className="flex flex-wrap rounded-lg bg-white">
+        <div className="w-full p-4">
+          <div className="mb-4 flex items-center justify-between">
+            <button
+              className="rounded-l bg-gray-300 px-4 py-2 font-bold text-gray-800 hover:bg-gray-400"
+              onClick={() => handleDayChange("prev")}
+            >
+              {"<"}
+            </button>
+            <h2 className="text-xl font-bold">{formatDate(currentDate)}</h2>
+            <button
+              className="rounded-r bg-gray-300 px-4 py-2 font-bold text-gray-800 hover:bg-gray-400"
+              onClick={() => handleDayChange("next")}
+            >
+              {">"}
+            </button>
           </div>
-          <div className="meals">
-            <div className="meal">
-              <h3>Breakfast</h3>
-              <button onClick={() => handleAddButtonClick("breakfast")}>
+          <div className="flex flex-col flex-wrap gap-4">
+            <div className="flex flex-col flex-wrap items-center rounded-lg border p-4 text-center">
+              <h3 className="mb-2 text-lg font-bold">Breakfast</h3>
+              <button
+                className="mb-2 w-3/5 rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700"
+                onClick={() => handleAddButtonClick("breakfast")}
+              >
                 Add
               </button>
               <p>
@@ -207,18 +219,26 @@ export const DailyMealPlanner = ({ userId }: { userId: number }) => {
                   : "No Selection"}
               </p>
             </div>
-            <div className="meal">
-              <h3>Lunch</h3>
-              <button onClick={() => handleAddButtonClick("lunch")}>Add</button>
+            <div className="flex flex-col flex-wrap items-center rounded-lg border p-4 text-center">
+              <h3 className="mb-2 text-lg font-bold">Lunch</h3>
+              <button
+                className="mb-2 w-3/5 rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700"
+                onClick={() => handleAddButtonClick("lunch")}
+              >
+                Add
+              </button>
               <p>
                 {selectedMeals.lunch
                   ? selectedMeals.lunch.name
                   : "No Selection"}
               </p>
             </div>
-            <div className="meal">
-              <h3>Dinner</h3>
-              <button onClick={() => handleAddButtonClick("dinner")}>
+            <div className="flex flex-col flex-wrap items-center rounded-lg border p-4 text-center">
+              <h3 className="mb-2 text-lg font-bold">Dinner</h3>
+              <button
+                className="mb-2 w-3/5 rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700"
+                onClick={() => handleAddButtonClick("dinner")}
+              >
                 Add
               </button>
               <p>
@@ -228,41 +248,47 @@ export const DailyMealPlanner = ({ userId }: { userId: number }) => {
               </p>
             </div>
           </div>
-          <div className="save-button-container">
-            <button className="save-button" onClick={handleSaveMealPlan}>
+          <div className="mt-4 flex flex-wrap justify-center">
+            <button
+              className="rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700"
+              onClick={handleSaveMealPlan}
+            >
               Save Meal Plan
             </button>
           </div>
         </div>
-        <div className="recipe-list-container">
-          <div className="recipe-list">
-            <input
-              type="text"
-              placeholder="Search recipes..."
-              value={searchQuery}
-              onChange={handleSearchChange}
-            />
-            <ul>
-              {filteredRecipes.map((recipe, index) => (
-                <li
-                  key={index}
-                  onClick={() => handleSelectRecipe(recipe)}
-                  className={
-                    (selectedMeals.breakfast &&
-                      recipe.id === selectedMeals.breakfast.id) ||
-                    (selectedMeals.lunch &&
-                      recipe.id === selectedMeals.lunch?.id) ||
-                    (selectedMeals.dinner &&
-                      recipe.id === selectedMeals.dinner?.id)
-                      ? "selected"
-                      : ""
-                  }
-                >
-                  {recipe.name}
-                </li>
-              ))}
-            </ul>
-          </div>
+      </div>
+
+      <div className="w-full pt-10">
+        <h2 className="mb-2 text-xl font-bold">Recipes</h2>
+        <div className="">
+          <input
+            className="mb-4 w-full appearance-none rounded border border-gray-400 px-3 py-2 leading-tight text-gray-700 focus:outline-none"
+            type="text"
+            placeholder="Search recipes..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+          />
+          <ul className="">
+            {filteredRecipes.map((recipe, index) => (
+              <li
+                key={index}
+                onClick={() => handleSelectRecipe(recipe)}
+                className={`pb mb-2 cursor-pointer rounded px-4 py-2 hover:bg-gray-100 ${
+                  (selectedMeals.breakfast &&
+                    recipe.id === selectedMeals.breakfast.id) ||
+                  (selectedMeals.lunch &&
+                    recipe.id === selectedMeals.lunch?.id) ||
+                  (selectedMeals.dinner &&
+                    recipe.id === selectedMeals.dinner?.id)
+                    ? "bg-green-200"
+                    : ""
+                }`}
+              >
+                {recipe.name}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>

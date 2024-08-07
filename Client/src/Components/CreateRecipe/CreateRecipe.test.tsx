@@ -25,7 +25,6 @@ describe("Create Recipe Component", () => {
     expect(screen.getByText("Preparation Method:")).toBeInTheDocument();
     expect(screen.getByText("Cooking Method:")).toBeInTheDocument();
     expect(screen.getByText("Add Ingredients")).toBeInTheDocument();
-    expect(screen.getByText("Ingredients List")).toBeInTheDocument();
     expect(screen.getByText("Add Recipe")).toBeInTheDocument();
   });
 

@@ -1,8 +1,7 @@
 // Import necessary hooks from 'react' and 'react-router-dom'
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import RecipeList from "../RecipeList/RecipeList";
-import "./ViewRecipes.css";
+import {RecipeList} from "../RecipeList/RecipeList";
 
 // Define the ViewRecipes functional component
 export const ViewRecipes = ({userId}: {userId: number}) => {
@@ -38,8 +37,8 @@ export const ViewRecipes = ({userId}: {userId: number}) => {
 
   // Return the JSX for rendering the ViewRecipes component
   return (
-    <div className="container">
-      <h1>Recipes</h1>
+    <div className="container w-full" >
+      <h1 className="text-4xl font-extrabold dark:text-white underline py-5 text-center">Recipes</h1>
       <RecipeList recipes={recipes} onViewClick={handleViewClick} />{" "}
     </div>
   );
