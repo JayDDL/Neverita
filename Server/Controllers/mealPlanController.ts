@@ -9,15 +9,15 @@ import {
 	updateMealPlanModel,
 } from "../models/mealPlanModels";
 import { getEndDate } from "../utils";
+import type { AuthRequest } from "../types";
 
 export const getAllMealPlansController = async (
-	req: Request,
+	req: AuthRequest,
 	res: Response,
 ): Promise<void> => {
 	try {
-		const { userId } = req.params;
-		const userIdNum = Number(userId);
-		const mealPlans = await getAllMealPlansModel(userIdNum);
+		const userId = req.user;
+		const mealPlans = await getAllMealPlansModel(userId);
 		res.status(200).json(mealPlans);
 	} catch (error) {
 		const typedError = error as Error;
@@ -26,15 +26,15 @@ export const getAllMealPlansController = async (
 };
 
 export const getMealPlanByDateController = async (
-	req: Request,
+	req: AuthRequest,
 	res: Response,
 ): Promise<void> => {
 	try {
-		const { userId, date } = req.params;
-		const userIdNum = Number(userId);
+		const userId = req.user;
+		const { date } = req.params;
 		const dateNum = new Date(Number(date));
 
-		const mealPlan = await getMealPlanByDateModel(userIdNum, dateNum);
+		const mealPlan = await getMealPlanByDateModel(userId, dateNum);
 		res.status(200).json(mealPlan);
 	} catch (error) {
 		const typedError = error as Error;
@@ -43,16 +43,16 @@ export const getMealPlanByDateController = async (
 };
 
 export const getWeeklyMealPlanController = async (
-	req: Request,
+	req: AuthRequest,
 	res: Response,
 ): Promise<void> => {
 	try {
-		const { userId, date } = req.params;
-		const userIdNum = Number(userId);
+		const userId = req.user;
+		const { date } = req.params;
 		const startDate = new Date(Number(date));
 		const endDate = getEndDate(startDate);
 		const weeklyMealPlan = await getWeeklyMealPlanModel(
-			userIdNum,
+			userId,
 			startDate,
 			endDate,
 		);
@@ -64,13 +64,12 @@ export const getWeeklyMealPlanController = async (
 };
 
 export const createMealPlanController = async (
-	req: Request,
+	req: AuthRequest,
 	res: Response,
 ): Promise<void> => {
 	try {
-		const { userId } = req.params;
-		const userIdNum = Number(userId);
-		const mealPlan = await createMealPlanModel(userIdNum, req.body);
+		const userId = req.user;
+		const mealPlan = await createMealPlanModel(userId, req.body);
 		res.status(201).json(mealPlan);
 	} catch (error) {
 		const typedError = error as Error;
@@ -80,19 +79,15 @@ export const createMealPlanController = async (
 
 // ! Update Meal Plan Controller
 export const updateMealPlanController = async (
-	req: Request,
+	req: AuthRequest,
 	res: Response,
 ): Promise<void> => {
 	try {
-		const { userId, mealPlanId } = req.params;
-		const userIdNum = Number(userId);
+		const userId = req.user;
+		const { mealPlanId } = req.params;
 		const mealPlanIdNum = Number(mealPlanId);
 
-		const mealPlan = await updateMealPlanModel(
-			userIdNum,
-			mealPlanIdNum,
-			req.body,
-		);
+		const mealPlan = await updateMealPlanModel(userId, mealPlanIdNum, req.body);
 		res.status(201).json(mealPlan);
 	} catch (error) {
 		const typedError = error as Error;
@@ -103,14 +98,15 @@ export const updateMealPlanController = async (
 // ! Delete Meal Plan Controller
 // * Remove Meal Plan by Id
 export const deleteMealPlanController = async (
-	req: Request,
+	req: AuthRequest,
 	res: Response,
 ): Promise<void> => {
 	try {
-		const { userId, mealPlanId } = req.params;
-		const userIdNum = Number(userId);
+		const userId = req.user;
+		const { mealPlanId } = req.params;
 		const mealPlanIdNum = Number(mealPlanId);
-		await deleteMealPlanModel(userIdNum, mealPlanIdNum);
+
+		await deleteMealPlanModel(userId, mealPlanIdNum);
 		res.status(200).json({ message: "Meal plan deleted successfully" });
 	} catch (error) {
 		const typedError = error as Error;

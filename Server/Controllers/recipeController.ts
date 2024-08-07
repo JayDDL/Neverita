@@ -5,15 +5,16 @@ import {
 	getAllRecipesModel,
 	getRecipeByIdModel,
 } from "../models/recipeModels";
+import type { AuthRequest } from "../types";
 
 export const getAllRecipesController = async (
-	req: Request,
+	req: AuthRequest,
 	res: Response,
 ): Promise<void> => {
 	try {
-		const { userId } = req.params;
-		const userIdNum = Number(userId);
-		const recipes = await getAllRecipesModel(userIdNum);
+		const userId = req.user;
+		console.log(userId);
+		const recipes = await getAllRecipesModel(userId);
 		res.status(200).json(recipes);
 	} catch (error) {
 		const typedError = error as Error;
@@ -23,16 +24,15 @@ export const getAllRecipesController = async (
 
 // Function to get a recipe by its ID
 export const getRecipeByIdController = async (
-	req: Request,
+	req: AuthRequest,
 	res: Response,
 ): Promise<void> => {
 	try {
-		const { userId, recipeId } = req.params;
-
-		const userIdNum = Number(userId);
+		const userId = req.user;
+		const { recipeId } = req.params;
 		const recipeIdNum = Number(recipeId);
 
-		const recipe = await getRecipeByIdModel(userIdNum, recipeIdNum);
+		const recipe = await getRecipeByIdModel(userId, recipeIdNum);
 		if (recipe) {
 			res.status(200).json(recipe);
 		} else {
@@ -45,15 +45,15 @@ export const getRecipeByIdController = async (
 };
 
 export const deleteRecipeByIdController = async (
-	req: Request,
+	req: AuthRequest,
 	res: Response,
 ) => {
 	try {
-		const { userId, recipeId } = req.params;
-		const userIdNum = Number(userId);
+		const userId = req.user;
+		const { recipeId } = req.params;
 		const recipeIdNum = Number(recipeId);
 
-		const deletedRecipe = deleteRecipeByIdModel(userIdNum, recipeIdNum);
+		const deletedRecipe = deleteRecipeByIdModel(userId, recipeIdNum);
 		res.status(200).json(deletedRecipe);
 	} catch (err) {
 		const typedError = err as Error;
@@ -62,21 +62,20 @@ export const deleteRecipeByIdController = async (
 };
 
 export const createRecipeController = async (
-	req: Request,
+	req: AuthRequest,
 	res: Response,
 ): Promise<void> => {
 	try {
-		const { userId } = req.params;
-		const userIdNum = Number(userId);
+		const userId = req.user;
 		const { recipe, ingredients } = req.body;
 
 		const newRecipe = await createRecipeAndIngredientsModel(
-			userIdNum,
+			userId,
 			recipe,
 			ingredients,
 		);
 
-		const newRecipeData = await getRecipeByIdModel(userIdNum, newRecipe.id);
+		const newRecipeData = await getRecipeByIdModel(userId, newRecipe.id);
 		res.status(201).json(newRecipeData);
 	} catch (error) {
 		const typedError = error as Error;
