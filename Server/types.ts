@@ -1,3 +1,5 @@
+import type { Request } from "express";
+
 export interface RecipeIngredientType {
 	cookingMethod: string;
 	preparationType: string;
@@ -25,4 +27,14 @@ export interface MealPlanUpdateType {
 
 export interface MealPlanInputType extends MealPlanUpdateType {
 	date: Date;
+}
+
+export interface UserIdType {
+	id: number;
+	iat?: number;
+	exp?: number;
+}
+
+export interface AuthRequest extends Request {
+	user: number;
 }
