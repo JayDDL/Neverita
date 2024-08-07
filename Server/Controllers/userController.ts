@@ -57,13 +57,13 @@ export const userLoginController = async (req: Request, res: Response) => {
 			httpOnly: true,
 			secure: true,
 			sameSite: "strict",
-			maxAge: 15 * 1000,
+			maxAge: 60 * 1000,
 		})
 		.cookie("refresh_token", refreshToken, {
 			httpOnly: true,
 			secure: true,
 			sameSite: "strict",
-			maxAge: 60 * 1000,
+			maxAge: 5 * 60 * 1000,
 		})
 		.header("Access-Control-Allow-Credentials", "true")
 		.json({ status: "success" });

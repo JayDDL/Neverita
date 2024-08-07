@@ -60,7 +60,7 @@ export const authMiddleware = (
 			httpOnly: true,
 			secure: true,
 			sameSite: "strict",
-			maxAge: 15 * 1000,
+			maxAge: 60 * 1000,
 		});
 		req.user = user.id;
 		next();
@@ -95,7 +95,7 @@ export const generateAccessToken = (user: UserIdType) => {
 	}
 	const ACCESS_TOKEN_SECRET = getAccessTokenSecret();
 	const accessToken = jwt.sign(userData, ACCESS_TOKEN_SECRET, {
-		expiresIn: "10s",
+		expiresIn: "1m",
 	});
 	return accessToken;
 };
@@ -103,7 +103,7 @@ export const generateAccessToken = (user: UserIdType) => {
 export const generateRefreshToken = (user: UserIdType) => {
 	const REFRESH_TOKEN_SECRET = getRefreshTokenSecret();
 	const refreshToken = jwt.sign(user, REFRESH_TOKEN_SECRET, {
-		expiresIn: "30s",
+		expiresIn: "5m",
 	});
 	return refreshToken;
 };
