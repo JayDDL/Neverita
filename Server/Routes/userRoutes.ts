@@ -1,13 +1,14 @@
-import * as express from "express";
+import express from "express";
 import {
 	getUserController,
-	createUserController,
+	userLoginController,
+	userRegisterController,
 } from "../controllers/userController";
 
-export const userRouter = express.Router(); // Create a new router object for users
+export const userRouter = express.Router();
 
-// Basic GET request
 userRouter.get("/", getUserController);
 
-// Basic POST request
-userRouter.post("/", createUserController);
+userRouter.post("/login", userLoginController);
+
+userRouter.post("/register", userRegisterController);
