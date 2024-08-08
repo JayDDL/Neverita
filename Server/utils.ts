@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import type { AuthRequest, UserIdType } from "./types";
+import type { UserIdType } from "./types";
 import type { Request, Response, NextFunction } from "express";
 
 export const getEndDate = (startDate: Date) => {
@@ -29,7 +29,7 @@ export const loggingMiddleware = (
 };
 
 export const authMiddleware = (
-	req: AuthRequest,
+	req: Request,
 	res: Response,
 	next: NextFunction,
 ) => {
@@ -42,13 +42,13 @@ export const authMiddleware = (
 
 	// If no refresh token - user needs to authenticate
 	if (!refreshToken)
-		return res.sendStatus(401).json({ message: "Authentication required" });
+		return res.status(401).json({ message: "Authentication required" });
 
 	try {
 		if (accessToken) {
 			const user = validateAccessToken(accessToken);
 			if (user) {
-				req.user = user.id;
+				req.user = (user as UserIdType).id ;
 				return next();
 			}
 		}
@@ -60,9 +60,9 @@ export const authMiddleware = (
 			httpOnly: true,
 			secure: true,
 			sameSite: "strict",
-			maxAge: 60 * 1000,
+			maxAge: 60 * 10000,
 		});
-		req.user = user.id;
+		req.user = (user as UserIdType).id;
 		next();
 	} catch (error) {
 		console.error(`Authentication middleware failed: ${error}`);
@@ -118,6 +118,7 @@ export const validateAccessToken = (accessToken: string) => {
 		jwtVerifyResult = user;
 		return;
 	});
+	
 	return jwtVerifyResult;
 };
 

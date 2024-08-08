@@ -8,6 +8,12 @@ import {
 
 export const recipeRouter = express.Router({ mergeParams: true });
 
+type AuthRequestHandler = (
+  req: Request,
+  res: Response,
+  next: express.NextFunction
+) => Promise<void> | void;
+
 // GET: All recipes
 recipeRouter.get("/", getAllRecipesController);
 
@@ -15,7 +21,7 @@ recipeRouter.get("/", getAllRecipesController);
 recipeRouter.get("/:recipeId", getRecipeByIdController);
 
 // DELETE: Recipe by ID
-recipeRouter.get("/:recipeId", deleteRecipeByIdController);
+recipeRouter.delete ("/:recipeId", deleteRecipeByIdController);
 
 // POST: Create new recipe
 recipeRouter.post("/", createRecipeController);
