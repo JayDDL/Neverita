@@ -89,7 +89,8 @@ export const createRecipeAndIngredientsModel = async (
 		// biome-ignore lint/complexity/noForEach: <explanation>
 		ingredientsArrWithUserId.forEach((ingredient: IngredientType) =>
 			// biome-ignore lint/complexity/noForEach: <explanation>
-			addIngredients.forEach((ingredientAdded) => {
+			addIngredients.forEach((ingredientAdded : { id: number; name: string; userId: number | null; } ) => {
+				console.log(ingredientAdded)
 				if (ingredientAdded.name === ingredient.name)
 					ingredient.id = ingredientAdded.id;
 			}),

@@ -9,10 +9,9 @@ import {
 	updateMealPlanModel,
 } from "../models/mealPlanModels";
 import { getEndDate } from "../utils";
-import type { AuthRequest } from "../types";
 
 export const getAllMealPlansController = async (
-	req: AuthRequest,
+	req: Request,
 	res: Response,
 ): Promise<void> => {
 	try {
@@ -26,7 +25,7 @@ export const getAllMealPlansController = async (
 };
 
 export const getMealPlanByDateController = async (
-	req: AuthRequest,
+	req: Request,
 	res: Response,
 ): Promise<void> => {
 	try {
@@ -35,7 +34,8 @@ export const getMealPlanByDateController = async (
 		const dateNum = new Date(Number(date));
 
 		const mealPlan = await getMealPlanByDateModel(userId, dateNum);
-		res.status(200).json(mealPlan);
+		if (mealPlan) res.status(200).json(mealPlan);
+		else res.status(200).json('No mealplan found for that date')
 	} catch (error) {
 		const typedError = error as Error;
 		res.status(500).json({ error: typedError.message });
@@ -43,7 +43,7 @@ export const getMealPlanByDateController = async (
 };
 
 export const getWeeklyMealPlanController = async (
-	req: AuthRequest,
+	req: Request,
 	res: Response,
 ): Promise<void> => {
 	try {
@@ -64,7 +64,7 @@ export const getWeeklyMealPlanController = async (
 };
 
 export const createMealPlanController = async (
-	req: AuthRequest,
+	req: Request,
 	res: Response,
 ): Promise<void> => {
 	try {
@@ -79,7 +79,7 @@ export const createMealPlanController = async (
 
 // ! Update Meal Plan Controller
 export const updateMealPlanController = async (
-	req: AuthRequest,
+	req: Request,
 	res: Response,
 ): Promise<void> => {
 	try {
@@ -98,7 +98,7 @@ export const updateMealPlanController = async (
 // ! Delete Meal Plan Controller
 // * Remove Meal Plan by Id
 export const deleteMealPlanController = async (
-	req: AuthRequest,
+	req: Request,
 	res: Response,
 ): Promise<void> => {
 	try {

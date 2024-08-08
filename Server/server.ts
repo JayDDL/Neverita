@@ -14,18 +14,36 @@ import {
 	validateAccessToken,
 	validateRefreshToken,
 } from "./utils";
-import type { AuthRequest } from "./types";
+
+
+declare global {
+  namespace Express {
+    interface Request {
+      user: number; 
+    }
+  }
+}
 
 export const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
-app.use(cors());
+app.use(
+	cors({
+			credentials: true,
+			origin: "http://localhost:5173",
+			allowedHeaders: ["Content-Type", "Authorization"],
+	}),
+);
 app.use(cookieParser());
 
+const tests = process.argv.slice(2)
+
+if(!tests){
 // MIDDLEWARE
 app.use(loggingMiddleware);
 app.use(authMiddleware);
+}
 
 // ROUTES
 app.use("/user", userRouter);

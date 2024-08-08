@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "npm jest --forceExit",
+    "test": "jest",
     "start": "node server.js",
     "dev": "dotenvx run -- bun --watch server.ts",
     "build": "tsc",
-    "db:reset":"dotenv -e .env -- npx prisma migrate reset",
+    "db:reset": "dotenv -e .env -- npx prisma migrate reset",
     "db:migrate": "dotenv -e .env -- npx prisma migrate dev && npx prisma generate",
     "db:seed": "dotenv -e .env -- npx prisma db seed",
     "db": "npm run db:reset && npm run db:migrate && npm run db:seed",
@@ -43,6 +43,8 @@
     "supertest": "^7.0.0"
   },
   "devDependencies": {
+    "@babel/preset-typescript": "^7.24.7",
+    "@jest/globals": "^29.7.0",
     "@types/bun": "^1.1.6",
     "@types/jest": "^29.5.12",
     "bun": "^1.1.21",
