@@ -10,13 +10,10 @@ import {
 	registerUserModel,
 	userLoginModel,
 } from "../models/userModels";
-import type { AuthRequest } from "../types";
 
-// Define a mock user for testing purposes
-const mockUser = { id: 1, name: "TestUser1", email: "testuser1@example.com" };
 
 export const getUserController = async (
-	req: AuthRequest,
+	req: Request,
 	res: Response,
 ): Promise<void> => {
 	try {
@@ -26,7 +23,7 @@ export const getUserController = async (
 			name: user?.name,
 			email: user?.email,
 		};
-		res.json(userProfileData);
+		res.status(200).json(userProfileData);
 	} catch (error) {
 		const typedError = error as Error;
 		res.status(500).json({ error: typedError.message });
@@ -57,13 +54,13 @@ export const userLoginController = async (req: Request, res: Response) => {
 			httpOnly: true,
 			secure: true,
 			sameSite: "strict",
-			maxAge: 60 * 1000,
+			maxAge: 60 * 10000,
 		})
 		.cookie("refresh_token", refreshToken, {
 			httpOnly: true,
 			secure: true,
 			sameSite: "strict",
-			maxAge: 5 * 60 * 1000,
+			maxAge: 5 * 60 * 10000,
 		})
 		.header("Access-Control-Allow-Credentials", "true")
 		.json({ status: "success" });
@@ -82,13 +79,13 @@ export const userRegisterController = async (req: Request, res: Response) => {
 			httpOnly: true,
 			secure: true,
 			sameSite: "strict",
-			maxAge: 15 * 1000,
+			maxAge: 15 * 10000,
 		})
 		.cookie("refresh_token", refreshToken, {
 			httpOnly: true,
 			secure: true,
 			sameSite: "strict",
-			maxAge: 60 * 1000,
+			maxAge: 60 * 10000,
 		})
 		.header("Access-Control-Allow-Credentials", "true")
 		.json({ status: "success" });

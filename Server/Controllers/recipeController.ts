@@ -5,10 +5,9 @@ import {
 	getAllRecipesModel,
 	getRecipeByIdModel,
 } from "../models/recipeModels";
-import type { AuthRequest } from "../types";
 
 export const getAllRecipesController = async (
-	req: AuthRequest,
+	req: Request,
 	res: Response,
 ): Promise<void> => {
 	try {
@@ -24,7 +23,7 @@ export const getAllRecipesController = async (
 
 // Function to get a recipe by its ID
 export const getRecipeByIdController = async (
-	req: AuthRequest,
+	req: Request,
 	res: Response,
 ): Promise<void> => {
 	try {
@@ -45,7 +44,7 @@ export const getRecipeByIdController = async (
 };
 
 export const deleteRecipeByIdController = async (
-	req: AuthRequest,
+	req: Request,
 	res: Response,
 ) => {
 	try {
@@ -62,7 +61,7 @@ export const deleteRecipeByIdController = async (
 };
 
 export const createRecipeController = async (
-	req: AuthRequest,
+	req: Request,
 	res: Response,
 ): Promise<void> => {
 	try {
