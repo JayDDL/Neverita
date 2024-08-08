@@ -13,7 +13,7 @@ const ViewRecipes = () => {
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const response = await fetch('http://localhost:5000/recipes');
+        const response = await fetch('http://localhost:3000/recipes');
         if (response.ok) {
           const data = await response.json();
           setRecipes(data); // Set the fetched recipes data to the state
