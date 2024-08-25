@@ -15,7 +15,7 @@
     "noImplicitThis": true,
     "alwaysStrict": true,
     "resolveJsonModule": true,
-    "types": ["vitest/globals", "node"],
+    "types": ["node"],
     "baseUrl": "./",
     "paths": {
       "*": ["node_modules/*"]

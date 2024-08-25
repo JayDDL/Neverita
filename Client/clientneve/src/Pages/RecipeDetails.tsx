@@ -36,7 +36,7 @@ const RecipeDetails = () => {
 
   return (
     <div className="recipe-details">
-      <h1>{recipe.name}</h1>
+      <h1>{recipe.title}</h1>
       <h2>Description</h2>
       <p>{recipe.description}</p>
       <h2>Ingredients</h2>

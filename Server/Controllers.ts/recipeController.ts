@@ -29,7 +29,6 @@ export const createRecipe = async (req: Request, res: Response): Promise<void> =
     console.log('Request body:', req.body);
     const { name, description, ingredients } = req.body;
 
-    // Validate required fields
     if (!name || typeof name !== 'string') {
       res.status(400).json({ error: 'Name is required and must be a string' });
       return;

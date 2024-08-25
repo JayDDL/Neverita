@@ -88,7 +88,7 @@ const DailyMealPlanner: React.FC = () => {
     if (currentMealType) {
       setSelectedMeals((prevSelectedMeals) => ({
         ...prevSelectedMeals,
-        [currentMealType]: { id: recipe.id.toString(), name: recipe.name },
+        [currentMealType]: { id: recipe.id.toString(), name: recipe.title },
       }));
       setCurrentMealType(null);
     }
@@ -141,7 +141,7 @@ const DailyMealPlanner: React.FC = () => {
   };
 
   const filteredRecipes = recipes.filter((recipe) =>
-    recipe.name.toLowerCase().includes(searchQuery.toLowerCase())
+    recipe.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const formatDate = (date: Date): string => {
@@ -221,7 +221,7 @@ const DailyMealPlanner: React.FC = () => {
                       : ""
                   }
                 >
-                  {recipe.name}
+                  {recipe.title}
                 </li>
               ))}
             </ul>

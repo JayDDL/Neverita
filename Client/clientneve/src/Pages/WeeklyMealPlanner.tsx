@@ -191,7 +191,7 @@ const WeeklyMealPlanner: React.FC = () => {
 
   // Filter recipes based on the search query
   const filteredRecipes = recipes.filter((recipe) =>
-    recipe.name.toLowerCase().includes(searchQuery.toLowerCase())
+    recipe.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   // Function to format the date as a string
@@ -306,7 +306,7 @@ const WeeklyMealPlanner: React.FC = () => {
                         : ""
                     }
                   >
-                    {recipe.name}
+                    {recipe.title}
                   </li>
                 ))}
               </ul>

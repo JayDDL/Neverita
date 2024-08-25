@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ViewRecipes.css";
 import { Recipe } from "../Types/type";
+import RecipeList from "../Components/RecipeList";
 
 // Define the ViewRecipes functional component
 const ViewRecipes = () => {
@@ -13,6 +14,7 @@ const ViewRecipes = () => {
     const fetchRecipes = async () => {
       try {
         const response = await fetch("http://localhost:3000/recipes");
+
         if (response.ok) {
           const data = await response.json();
           setRecipes(data);
@@ -29,10 +31,14 @@ const ViewRecipes = () => {
 
     fetchRecipes();
   }, []);
+  const handleViewClick = (id: number) => {
+    navigate(`/recipe/${id}`);
+  };
 
   return (
     <div className="container">
       <h1>Recipes</h1>
+      <RecipeList recipes={recipes} onViewClick={handleViewClick} />
     </div>
   );
 };

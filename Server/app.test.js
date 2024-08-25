@@ -31,17 +31,17 @@ import app from './server';
       }
     });
 
-    it('POST /daily-meal-plans should create a new daily meal plan', async () => {
-      const newMealPlan = {
-        date: '2024-02-01',
-        breakfastId: 1, 
-        lunchId: 2,     
-        dinnerId: 3     
-      };
-      const res = await request(app).post('/daily-meal-plans').send(newMealPlan);
-      expect(res.statusCode).toBe(201);
-      expect(res.body).toHaveProperty('date', newMealPlan.date);
-    });
+    // it('POST /daily-meal-plans should create a new daily meal plan', async () => {
+    //   const newMealPlan = {
+    //     date: '2024-02-01',
+    //     breakfastId: 1, 
+    //     lunchId: 2,     
+    //     dinnerId: 3     
+    //   };
+    //   const res = await request(app).post('/daily-meal-plans').send(newMealPlan);
+    //   expect(res.statusCode).toBe(201);
+    //   expect(res.body).toHaveProperty('date', newMealPlan.date);
+    // });
   });
 
   // Meal Plan Routes

@@ -14,7 +14,7 @@ const RecipeList: React.FC<RecipeListProps> = ({ recipes, onViewClick }) => {
       {recipes.map((recipe) => (
         <div key={recipe.id} className="recipe-item">
           <div>
-            <h2 className="recipe-title">{recipe.name}</h2>
+            <h2 className="recipe-title">{recipe.title}</h2>
             <p className="recipe-description">{recipe.description}</p>
           </div>
           <button onClick={() => onViewClick(recipe.id)}>View</button>
