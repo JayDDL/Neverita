@@ -1,6 +1,6 @@
 export interface Meal {
   id: string;
-  name: string;
+  name?: string;
 }
 
 export type MealType = "breakfast" | "lunch" | "dinner";
