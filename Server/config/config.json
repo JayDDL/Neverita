@@ -1,8 +1,8 @@
 {
   "development": {
-    "username": "postgres",
-    "password": "postgres",
-    "database": "Neverita-DB",
+    "username": "stepheno",
+    "password": "password",
+    "database": "postgres",
     "host": "127.0.0.1",
     "dialect": "postgres"
   }
